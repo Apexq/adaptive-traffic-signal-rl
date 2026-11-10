@@ -1,4 +1,4 @@
 mode,completed_trips,avg_waiting_time_s,avg_time_loss_s,avg_travel_time_s,avg_corridor_queue_veh,total_co2_kg,ep_reward,avg_loss,label
 fixed,1619,33.09,46.31,82.88,18.34,91.86,0.0,0.0,1. Fixed-Time (Sabit Sureli Klasik)
 actuated,1602,31.0,46.54,83.17,14.02,82.8,0.0,0.0,2. Actuated (Klasik Sirali Sensorlu)
-dqn,1621,14.4,26.14,62.77,7.3,54.8,0.0,0.0,3. DQN RL (4 Fazli Akilli Faz Atlama)
+dqn,1623,13.0,24.5,61.12,5.79,50.16,0.0,0.0,3. DQN RL (4 Fazli Akilli Faz Atlama)

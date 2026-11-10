@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="100%" height="100%">
+<rect width="820" height="430" fill="#ffffff" rx="10"/>
+<text x="410" y="34" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#0f172a">50-Episode DQN Training Convergence on Real RESCO Cologne-3 Network</text>
+<line x1="80" y1="365" x2="780" y2="365" stroke="#64748b" stroke-width="2"/>
+<line x1="80" y1="60" x2="80" y2="365" stroke="#64748b" stroke-width="2"/>
+<text x="28" y="215" text-anchor="middle" transform="rotate(-90 28 215)" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#334155">Average Waiting Time (seconds)</text>
+<text x="440" y="412" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#334155">Training Episode (1 to 50 - Each Episode = 3600s Cologne Rush Hour)</text>
+<line x1="80" y1="304.0" x2="780" y2="304.0" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+<text x="70" y="308.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#475569">10s</text>
+<line x1="80" y1="243.0" x2="780" y2="243.0" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+<text x="70" y="247.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#475569">15s</text>
+<line x1="80" y1="182.0" x2="780" y2="182.0" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+<text x="70" y="186.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#475569">20s</text>
+<line x1="80" y1="121.0" x2="780" y2="121.0" stroke="#e2e8f0" stroke-dasharray="4,4"/>
+<text x="70" y="125.0" text-anchor="end" font-family="Arial, sans-serif" font-size="11" fill="#475569">25s</text>
+<text x="80.0" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 1</text>
+<text x="208.6" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 10</text>
+<text x="351.4" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 20</text>
+<text x="494.3" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 30</text>
+<text x="637.1" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 40</text>
+<text x="780.0" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#475569">Ep 50</text>
+<polyline fill="none" stroke="#93c5fd" stroke-width="2" points="80.0,218.6 94.3,140.9 108.6,244.3 122.9,247.9 137.1,231.9 151.4,272.5 165.7,279.1 180.0,280.0 194.3,295.3 208.6,262.0 222.9,280.1 237.1,294.6 251.4,288.1 265.7,286.9 280.0,289.0 294.3,275.0 308.6,274.7 322.9,298.6 337.1,292.2 351.4,307.5 365.7,292.0 380.0,279.1 394.3,300.7 408.6,262.9 422.9,299.7 437.1,315.1 451.4,300.9 465.7,310.1 480.0,293.0 494.3,282.8 508.6,299.5 522.9,316.6 537.1,307.8 551.4,270.4 565.7,315.1 580.0,308.4 594.3,318.5 608.6,308.3 622.9,317.8 637.1,87.8 651.4,102.0 665.7,308.1 680.0,307.5 694.3,320.2 708.6,307.4 722.9,318.8 737.1,311.9 751.4,213.5 765.7,309.5 780.0,298.8"/>
+<polyline fill="none" stroke="#10b981" stroke-width="3" points="80.0,218.6 94.3,218.6 108.6,244.3 122.9,247.9 137.1,247.9 151.4,272.5 165.7,279.1 180.0,280.0 194.3,295.3 208.6,295.3 222.9,295.3 237.1,295.3 251.4,295.3 265.7,295.3 280.0,295.3 294.3,295.3 308.6,295.3 322.9,298.6 337.1,298.6 351.4,307.5 365.7,307.5 380.0,307.5 394.3,307.5 408.6,307.5 422.9,307.5 437.1,315.1 451.4,315.1 465.7,315.1 480.0,315.1 494.3,315.1 508.6,315.1 522.9,316.6 537.1,316.6 551.4,316.6 565.7,316.6 580.0,316.6 594.3,318.5 608.6,318.5 622.9,318.5 637.1,318.5 651.4,318.5 665.7,318.5 680.0,318.5 694.3,320.2 708.6,320.2 722.9,320.2 737.1,320.2 751.4,320.2 765.7,320.2 780.0,320.2"/>
+<rect x="520" y="65" width="245" height="54" fill="#f8fafc" stroke="#cbd5e1" rx="6"/>
+<line x1="535" y1="84" x2="565" y2="84" stroke="#93c5fd" stroke-width="2.5"/>
+<text x="575" y="88" font-family="Arial, sans-serif" font-size="12" fill="#334155">Episode Waiting Time (s)</text>
+<line x1="535" y1="105" x2="565" y2="105" stroke="#10b981" stroke-width="3"/>
+<text x="575" y="109" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Best Validation Record (8.67s)</text>
+</svg>

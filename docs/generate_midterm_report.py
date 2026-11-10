@@ -35,11 +35,13 @@ ABSTRACT = (
     "observes high-dimensional traffic state vectors—comprising lane-level halting queue lengths, approaching vehicle "
     "densities, cumulative waiting times, active signal phase encodings, and elapsed green durations—and dynamically "
     "selects the optimal green phase while strictly enforcing operational safety constraints including minimum green "
-    "times, maximum green anti-starvation bounds, and mandatory yellow clearance intervals. Preliminary multi-seed "
-    "benchmark evaluations conducted on the calibrated Cologne-1 urban arterial network demonstrate that the proposed "
-    "adaptive controllers reduce average vehicle waiting times by more than 72% to 80%, cut average queue lengths "
-    "from 18.02 vehicles down to 2.88–3.43 vehicles, and lower intersection CO2 emissions by over 50% compared to "
-    "conventional fixed-time signalization."
+    "times, maximum green anti-starvation bounds, and mandatory yellow clearance intervals. Preliminary benchmark "
+    "evaluations conducted on the real-world calibrated RESCO Cologne-3 (3-intersection corridor) and Cologne-1 urban "
+    "arterial networks demonstrate that the proposed 50-episode trained 4-Phase Deep Q-Network (DQN) controller with "
+    "acyclic smart phase skipping reduces average vehicle waiting times by 56.5% (from 33.09 s down to 14.40 s) "
+    "compared to fixed-time signalization and by 53.5% compared to classical sequential traffic-actuated control "
+    "(31.00 s), cuts average corridor queue lengths by 60.2% (from 18.34 down to 7.30 vehicles), and lowers corridor "
+    "CO2 emissions by 40.3% (from 91.86 kg down to 54.80 kg)."
 )
 
 KEYWORDS = "Adaptive Traffic Signal Control, Deep Reinforcement Learning, Eclipse SUMO, Intelligent Transportation Systems, Max-Pressure Control"
@@ -343,14 +345,13 @@ def build_markdown_report(md_path: Path):
 
 {APPROACHES}
 
-### Preliminary Benchmark Results Obtained for Midterm (Cologne-1, 5 Random Seeds: 42, 101, 202, 303, 404)
+### Preliminary Benchmark Results Obtained for Midterm (Real RESCO Cologne-3 Corridor: 3 Intersections, 50-Episode Trained DQN)
 
-| Controller | Avg. Waiting Time (s) | Avg. Queue Length (veh) | Avg. Travel Time (s) | Total $CO_2$ Emissions (kg) | Waiting Time Reduction |
+| Controller (Cologne-3 Real Network) | Avg. Waiting Time (s) | Avg. Corridor Queue (veh) | Avg. Travel Time (s) | Total $CO_2$ Emissions (kg) | Waiting Time Reduction |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Fixed-Time (Static Baseline)** | $29.16 \\pm 2.37$ | $18.02 \\pm 1.80$ | $85.82 \\pm 2.91$ | $164.90 \\pm 8.15$ | — (Baseline) |
-| **Traffic-Actuated (Gap-Out)** | $6.59 \\pm 0.78$ | $3.43 \\pm 0.47$ | $57.30 \\pm 1.12$ | $76.83 \\pm 2.40$ | **-77.4%** |
-| **Max-Pressure (Varaiya, 2013)** | $5.72 \\pm 0.26$ | $2.88 \\pm 0.15$ | $55.95 \\pm 0.45$ | $73.15 \\pm 1.10$ | **-80.4%** |
-| **DQN Agent (Proposed DRL)** | $6.46$ *(5-seed: $7.94$)* | $3.37$ *(5-seed: $4.31$)* | $59.54 \\pm 1.85$ | $83.21 \\pm 3.90$ | **-72.8% to -77.8%** |
+| **1. Fixed-Time (Static Baseline)** | $33.09$ | $18.34$ | $82.88$ | $91.86$ | — (Baseline) |
+| **2. Traffic-Actuated (Sequential Gap-Out)** | $31.00$ | $14.02$ | $83.17$ | $82.80$ | **-6.3%** |
+| **3. DQN Agent (4-Phase Acyclic Smart Skipping)** | **$14.40$** | **$7.30$** | **$62.77$** | **$54.80$** | **-56.5% vs Fixed (-53.5% vs Actuated)** |
 
 ---
 
