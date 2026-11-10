@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <vType id="car" vClass="passenger" guiShape="passenger" length="4.5" minGap="2.5" accel="2.6" decel="4.5" maxSpeed="15.0" color="50,190,255" emissionClass="HBEFA3/PC_G_EU4"/>
+    <vType id="bus" vClass="bus" guiShape="bus" length="12.0" minGap="3.0" accel="1.5" decel="3.5" maxSpeed="12.5" color="255,165,0" emissionClass="HBEFA3/Bus"/>
+
+    <!-- Full Corridor Arterial Routes -->
+    <route id="corridor_W_E" edges="W2J1 J12J2 J22J3 J32E"/>
+    <route id="corridor_E_W" edges="E2J3 J32J2 J22J1 J12W"/>
+
+    <!-- Turning & Cross-Street Routes at J1, J2, J3 -->
+    <route id="W_to_N2" edges="W2J1 J12J2 J22N2"/>
+    <route id="W_to_S3" edges="W2J1 J12J2 J22J3 J32S3"/>
+    <route id="E_to_S2" edges="E2J3 J32J2 J22S2"/>
+    <route id="E_to_N1" edges="E2J3 J32J2 J22J1 J12N1"/>
+
+    <route id="N1_to_S1" edges="N12J1 J12S1"/>
+    <route id="S1_to_N1" edges="S12J1 J12N1"/>
+    <route id="N1_to_E"  edges="N12J1 J12J2 J22J3 J32E"/>
+
+    <route id="N2_to_S2" edges="N22J2 J22S2"/>
+    <route id="S2_to_N2" edges="S22J2 J22N2"/>
+    <route id="S2_to_E"  edges="S22J2 J22J3 J32E"/>
+
+    <route id="N3_to_S3" edges="N32J3 J32S3"/>
+    <route id="S3_to_N3" edges="S32J3 J32N3"/>
+    <route id="N3_to_W"  edges="N32J3 J32J2 J22J1 J12W"/>
+
+    <!-- Regime 1 (0 - 600s): Heavy East-West Arterial Wave Across All 3 Intersections -->
+    <flow id="c3_r1_WE" type="car" route="corridor_W_E" begin="0" end="600" vehsPerHour="520" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_EW" type="car" route="corridor_E_W" begin="0" end="600" vehsPerHour="480" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_WN2" type="car" route="W_to_N2" begin="0" end="600" vehsPerHour="140" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_ES2" type="car" route="E_to_S2" begin="0" end="600" vehsPerHour="130" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_N1S1" type="car" route="N1_to_S1" begin="0" end="600" vehsPerHour="120" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_N2S2" type="car" route="N2_to_S2" begin="0" end="600" vehsPerHour="140" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_N3S3" type="car" route="N3_to_S3" begin="0" end="600" vehsPerHour="120" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_bus1" type="bus" route="corridor_W_E" begin="5" end="600" vehsPerHour="40" departLane="best" departSpeed="max"/>
+    <flow id="c3_r1_bus2" type="bus" route="corridor_E_W" begin="15" end="600" vehsPerHour="35" departLane="best" departSpeed="max"/>
+
+    <!-- Regime 2 (600 - 1200s): Heavy North-South Cross-Street Surge at J1, J2, J3 -->
+    <flow id="c3_r2_N1S1" type="car" route="N1_to_S1" begin="600" end="1200" vehsPerHour="420" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_S1N1" type="car" route="S1_to_N1" begin="600" end="1200" vehsPerHour="380" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_N2S2" type="car" route="N2_to_S2" begin="600" end="1200" vehsPerHour="460" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_S2N2" type="car" route="S2_to_N2" begin="600" end="1200" vehsPerHour="440" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_N3S3" type="car" route="N3_to_S3" begin="600" end="1200" vehsPerHour="400" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_S3N3" type="car" route="S3_to_N3" begin="600" end="1200" vehsPerHour="390" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_WE" type="car" route="corridor_W_E" begin="600" end="1200" vehsPerHour="180" departLane="best" departSpeed="max"/>
+    <flow id="c3_r2_EW" type="car" route="corridor_E_W" begin="600" end="1200" vehsPerHour="170" departLane="best" departSpeed="max"/>
+
+    <!-- Regime 3 (1200 - 1800s): Combined Corridor & Cross-Street Rush Hour -->
+    <flow id="c3_r3_WE" type="car" route="corridor_W_E" begin="1200" end="1800" vehsPerHour="380" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_EW" type="car" route="corridor_E_W" begin="1200" end="1800" vehsPerHour="360" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_N1E" type="car" route="N1_to_E" begin="1200" end="1800" vehsPerHour="160" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_S2E" type="car" route="S2_to_E" begin="1200" end="1800" vehsPerHour="150" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_N3W" type="car" route="N3_to_W" begin="1200" end="1800" vehsPerHour="150" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_N2S2" type="car" route="N2_to_S2" begin="1200" end="1800" vehsPerHour="280" departLane="best" departSpeed="max"/>
+    <flow id="c3_r3_S1N1" type="car" route="S1_to_N1" begin="1200" end="1800" vehsPerHour="260" departLane="best" departSpeed="max"/>
+</routes>

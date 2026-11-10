@@ -2,26 +2,21 @@
 <routes>
     <vType id="car" vClass="passenger" guiShape="passenger" length="4.5" minGap="2.5" accel="2.6" decel="4.5" maxSpeed="15.0" color="70,180,255" emissionClass="HBEFA3/PC_G_EU4"/>
     <vType id="bus" vClass="bus" guiShape="bus" length="12.0" minGap="3.0" accel="1.5" decel="3.5" maxSpeed="12.5" color="255,180,40" emissionClass="HBEFA3/Bus"/>
-    <vType id="ambulance" vClass="emergency" guiShape="emergency" length="6.0" minGap="2.0" accel="3.2" decel="5.0" maxSpeed="20.0" color="255,40,40" speedFactor="1.3"/>
 
-    <!-- Routes -->
     <route id="W_E" edges="W2C C2E"/>
     <route id="W_N" edges="W2C C2N"/>
     <route id="W_S" edges="W2C C2S"/>
-
     <route id="E_W" edges="E2C C2W"/>
     <route id="E_N" edges="E2C C2N"/>
     <route id="E_S" edges="E2C C2S"/>
-
     <route id="N_S" edges="N2C C2S"/>
     <route id="N_E" edges="N2C C2E"/>
     <route id="N_W" edges="N2C C2W"/>
-
     <route id="S_N" edges="S2C C2N"/>
     <route id="S_E" edges="S2C C2E"/>
     <route id="S_W" edges="S2C C2W"/>
 
-    <!-- Regime 1 (0 - 600s): Heavy East-West Arterial Flow, Light North-South -->
+    <!-- Regime 1 (0 - 600s): Heavy East-West Arterial Flow -->
     <flow id="r1_WE" type="car" route="W_E" begin="0" end="600" vehsPerHour="650" departLane="best" departSpeed="max"/>
     <flow id="r1_WN" type="car" route="W_N" begin="0" end="600" vehsPerHour="180" departLane="best" departSpeed="max"/>
     <flow id="r1_WS" type="car" route="W_S" begin="0" end="600" vehsPerHour="140" departLane="best" departSpeed="max"/>
@@ -32,7 +27,7 @@
     <flow id="r1_SN" type="car" route="S_N" begin="0" end="600" vehsPerHour="150" departLane="best" departSpeed="max"/>
     <flow id="r1_bus_WE" type="bus" route="W_E" begin="10" end="600" vehsPerHour="40" departLane="best" departSpeed="max"/>
 
-    <!-- Regime 2 (600 - 1200s): Heavy North-South Commuter Surge, Light East-West -->
+    <!-- Regime 2 (600 - 1200s): Heavy North-South Commuter Surge -->
     <flow id="r2_NS" type="car" route="N_S" begin="600" end="1200" vehsPerHour="680" departLane="best" departSpeed="max"/>
     <flow id="r2_NE" type="car" route="N_E" begin="600" end="1200" vehsPerHour="190" departLane="best" departSpeed="max"/>
     <flow id="r2_NW" type="car" route="N_W" begin="600" end="1200" vehsPerHour="150" departLane="best" departSpeed="max"/>
@@ -43,7 +38,7 @@
     <flow id="r2_EW" type="car" route="E_W" begin="600" end="1200" vehsPerHour="150" departLane="best" departSpeed="max"/>
     <flow id="r2_bus_NS" type="bus" route="N_S" begin="610" end="1200" vehsPerHour="45" departLane="best" departSpeed="max"/>
 
-    <!-- Regime 3 (1200 - 1800s): Balanced Peak Congestion + Emergency Vehicles -->
+    <!-- Regime 3 (1200 - 1800s): Balanced Peak Congestion -->
     <flow id="r3_WE" type="car" route="W_E" begin="1200" end="1800" vehsPerHour="480" departLane="best" departSpeed="max"/>
     <flow id="r3_EW" type="car" route="E_W" begin="1200" end="1800" vehsPerHour="460" departLane="best" departSpeed="max"/>
     <flow id="r3_NS" type="car" route="N_S" begin="1200" end="1800" vehsPerHour="450" departLane="best" departSpeed="max"/>
