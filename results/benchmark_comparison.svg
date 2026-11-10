@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" width="100%" height="100%">
+<rect width="760" height="420" fill="#ffffff" rx="10"/>
+<text x="380" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1e293b">Controller Performance Comparison on Cologne-1 (5 Seeds Mean ± SD)</text>
+<line x1="90" y1="330" x2="700" y2="330" stroke="#94a3b8" stroke-width="2"/>
+<line x1="90" y1="70" x2="90" y2="330" stroke="#94a3b8" stroke-width="2"/>
+<text x="35" y="200" text-anchor="middle" transform="rotate(-90 35 200)" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#334155">Average Waiting Time per Vehicle (seconds)</text>
+<rect x="135" y="130.0" width="90" height="200.0" fill="#ef4444" rx="5"/>
+<text x="180.0" y="120.0" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">29.16s (±2.37)</text>
+<text x="180.0" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">Fixed-Time</text>
+<text x="180.0" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#64748b">Queue: 18.0 veh | CO2: 164.9 kg</text>
+<rect x="280" y="284.8" width="90" height="45.2" fill="#f59e0b" rx="5"/>
+<text x="325.0" y="274.8" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">6.59s (±0.78)</text>
+<text x="325.0" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">Actuated</text>
+<text x="325.0" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#64748b">Queue: 3.4 veh | CO2: 76.8 kg</text>
+<rect x="425" y="290.8" width="90" height="39.2" fill="#3b82f6" rx="5"/>
+<text x="470.0" y="280.8" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">5.72s (±0.26)</text>
+<text x="470.0" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">Max-Pressure</text>
+<text x="470.0" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#64748b">Queue: 2.9 veh | CO2: 73.2 kg</text>
+<rect x="570" y="275.5" width="90" height="54.5" fill="#10b981" rx="5"/>
+<text x="615.0" y="265.5" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">7.94s (±1.32)</text>
+<text x="615.0" y="355" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#1e293b">DQN (Proposed)</text>
+<text x="615.0" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#64748b">Queue: 4.3 veh | CO2: 83.2 kg</text>
+</svg>

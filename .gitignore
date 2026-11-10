@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# SUMO temporary outputs
+*.tripinfo.xml
+*.summary.xml
+detector_output.xml
+sumo_run_*.xml
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
