@@ -1,4 +1,4 @@
-mode,completed_trips,avg_waiting_time_s,avg_time_loss_s,avg_travel_time_s,avg_corridor_queue_veh,total_co2_kg,label
-fixed,1011,28.64,39.23,91.02,16.48,180.07,1. Fixed-Time (Sabit Sureli)
-actuated,1021,8.38,16.86,68.88,4.75,116.35,2. Actuated (Klasik Sensorlu)
-dqn,1023,7.18,14.97,67.08,4.06,110.84,3. DQN RL (Akilli Adaptif - Onerilen)
+mode,completed_trips,avg_waiting_time_s,avg_time_loss_s,avg_travel_time_s,avg_corridor_queue_veh,total_co2_kg,ep_reward,avg_loss,label
+fixed,1611,26.12,38.71,75.36,14.58,77.88,0.0,0.0,1. Fixed-Time (Sabit Sureli Klasik)
+actuated,1624,20.63,34.16,70.72,8.69,56.57,0.0,0.0,2. Actuated (Klasik Sensorlu Gap-Out)
+dqn,1619,20.13,33.53,70.16,8.34,55.83,0.0,0.0,3. DQN RL (Sifirdan Egitilen Akilli Ajan)

@@ -1,19 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <input>
-        <net-file value="cologne1.net.xml"/>
-        <route-files value="cologne1.rou.xml"/>
-        <gui-settings-file value="gui-settings.xml"/>
-    </input>
-    <time>
-        <begin value="0"/>
-        <end value="1800"/>
-        <step-length value="1.0"/>
-    </time>
-    <processing>
-        <time-to-teleport value="-1"/>
-    </processing>
-    <report>
-        <no-step-log value="true"/>
-    </report>
+  <input>
+    <net-file value="cologne1.net.xml"/>
+    <route-files value="cologne1.rou.xml"/>
+    <gui-settings-file value="gui-settings.xml"/>
+  </input>
+  <time>
+    <begin value="25200"/>
+    <end value="28800"/>
+  </time>
 </configuration>

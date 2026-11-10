@@ -1,8 +1,8 @@
 """
-Multi-Intersection Corridor Runner & Benchmark (Cologne-3: 3 Intersections TL_1, TL_2, TL_3)
-Supports both:
-  1. Live Visual SUMO-GUI mode with real-time console telemetry for all 3 intersections
-  2. Headless benchmark comparison mode across Fixed-Time, Actuated, and DQN/Adaptive RL
+Real-World RESCO Cologne-3 (3 Intersections) & Cologne-1 Traffic Signal Control Runner
+- Automatically extracts real traffic light phases and incoming street lanes via TraCI
+- Trains the Phase-Competition DQN Agent FROM SCRATCH (100% random initial weights)
+- Evaluates Fixed-Time (Static), Actuated (Gap-Out), and DQN RL on real Cologne traffic (07:00-08:00 AM)
 """
 
 import csv
@@ -22,101 +22,189 @@ from rl_agent import DQNAgent
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SUMOCFG_C3 = BASE_DIR / "nets" / "cologne3" / "cologne3.sumocfg"
-MODEL_PATH = BASE_DIR / "models" / "dqn_cologne1.json"
+SUMOCFG_C1 = BASE_DIR / "nets" / "cologne1" / "cologne1.sumocfg"
+MODEL_PATH = BASE_DIR / "models" / "dqn_resco_cologne.json"
 RESULTS_DIR = BASE_DIR / "results"
 
-# Approach lane mappings for each of the 3 intersections in Cologne-3
-INTERSECTIONS = {
-    "TL_1": {
-        "name": "Kavsak-1 (Bati)",
-        "NS": ["N12J1_0", "N12J1_1", "S12J1_0", "S12J1_1"],
-        "EW": ["W2J1_0", "W2J1_1", "J22J1_0", "J22J1_1"],
-    },
-    "TL_2": {
-        "name": "Kavsak-2 (Merkez)",
-        "NS": ["N22J2_0", "N22J2_1", "S22J2_0", "S22J2_1"],
-        "EW": ["J12J2_0", "J12J2_1", "J32J2_0", "J32J2_1"],
-    },
-    "TL_3": {
-        "name": "Kavsak-3 (Dogu)",
-        "NS": ["N32J3_0", "N32J3_1", "S32J3_0", "S32J3_1"],
-        "EW": ["J22J3_0", "J22J3_1", "E2J3_0", "E2J3_1"],
-    },
-}
 
+class RealNetworkSimulation:
+    """
+    Controls real-world RESCO Cologne networks (Cologne-1 or Cologne-3) dynamically via TraCI.
+    """
 
-class Corridor3Simulation:
-    """Manages simultaneous control of TL_1, TL_2, and TL_3 in the 3-intersection corridor."""
-
-    def __init__(self, mode: str = "dqn", use_gui: bool = True, seed: int = 42, sim_end: int = 1800):
+    def __init__(
+        self,
+        sumocfg_path: Path = SUMOCFG_C3,
+        mode: str = "dqn",
+        use_gui: bool = False,
+        seed: int = 42,
+        sim_duration: int = 1800,
+        agent: DQNAgent | None = None,
+        train_mode: bool = False,
+    ):
+        self.sumocfg_path = sumocfg_path
         self.mode = mode.lower()
         self.use_gui = use_gui
         self.seed = seed
-        self.sim_end = sim_end
+        self.sim_duration = sim_duration
+        self.train_mode = train_mode
         self.min_green = 10
-        self.max_green = 55
+        self.max_green = 45
         self.yellow_time = 3
         self.delta_time = 5
 
-        self.agent = DQNAgent()
-        if MODEL_PATH.exists():
-            self.agent.load(MODEL_PATH)
+        if agent is not None:
+            self.agent = agent
+        else:
+            self.agent = DQNAgent(seed=seed)
+            if MODEL_PATH.exists() and not train_mode:
+                self.agent.load(MODEL_PATH)
 
-        # Per-intersection state tracking:
-        # In cologne3.net.xml:
-        #   action 0 = NS Green -> SUMO phase 2 (yellow = phase 3)
-        #   action 1 = EW Green -> SUMO phase 0 (yellow = phase 1)
-        self.action_to_phase = {0: 2, 1: 0}
-        self.current_action = {"TL_1": 1, "TL_2": 1, "TL_3": 1}
-        self.elapsed_green = {"TL_1": 0, "TL_2": 0, "TL_3": 0}
-        self.pending_yellow = {"TL_1": 0, "TL_2": 0, "TL_3": 0}
-        self.target_action = {"TL_1": 1, "TL_2": 1, "TL_3": 1}
+        # Populated dynamically from the real .net.xml once TraCI starts
+        self.tl_ids: List[str] = []
+        # Major green phases (e.g. [0, 4] in RESCO Cologne intersections)
+        self.tl_major_phases: Dict[str, List[int]] = {}
+        self.tl_major_lanes: Dict[str, List[List[str]]] = {}
+        self.tl_all_lanes: Dict[str, List[str]] = {}
 
-    def _get_tl_state(self, tl_id: str) -> List[float]:
-        cfg = INTERSECTIONS[tl_id]
-        ns_q = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["NS"]) / 40.0
-        ew_q = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["EW"]) / 40.0
-        ns_v = sum(traci.lane.getLastStepVehicleNumber(l) for l in cfg["NS"]) / 60.0
-        ew_v = sum(traci.lane.getLastStepVehicleNumber(l) for l in cfg["EW"]) / 60.0
-        ns_w = min(1.0, sum(traci.lane.getWaitingTime(l) for l in cfg["NS"]) / 800.0)
-        ew_w = min(1.0, sum(traci.lane.getWaitingTime(l) for l in cfg["EW"]) / 800.0)
-        cur_a = float(self.current_action[tl_id])
-        min_g = 1.0 if self.elapsed_green[tl_id] >= self.min_green else 0.0
-        return [ns_q, ew_q, ns_v, ew_v, ns_w, ew_w, cur_a, min_g]
+        self.current_action_idx: Dict[str, int] = {}
+        self.elapsed_green: Dict[str, int] = {}
+        self.transition_queue: Dict[str, List[Tuple[int, int]]] = {}
+        self.target_action_idx: Dict[str, int] = {}
+        self.prev_features: Dict[str, List[List[float]]] = {}
 
-    def _decide_action(self, tl_id: str) -> int:
-        cur = self.current_action[tl_id]
-        elapsed = self.elapsed_green[tl_id]
-        cfg = INTERSECTIONS[tl_id]
-        ns_q = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["NS"])
-        ew_q = sum(traci.lane.getLastStepVehicleNumber(l) for l in cfg["EW"])
-        ew_halt = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["EW"])
+    def _discover_network_topology(self):
+        """Inspects all traffic lights in the real Cologne network and maps major green phases to street lanes."""
+        self.tl_ids = list(traci.trafficlight.getIDList())
+        for tl in self.tl_ids:
+            logic = traci.trafficlight.getAllProgramLogics(tl)[0]
+            links = traci.trafficlight.getControlledLinks(tl)
 
-        if elapsed < self.min_green:
-            return cur
+            major_phases = []
+            major_lanes = []
+            all_lanes_set = set()
+
+            for p_idx, phase in enumerate(logic.phases):
+                if "y" not in phase.state.lower() and "g" in phase.state.lower():
+                    lanes_for_phase = []
+                    for link_idx, ch in enumerate(phase.state):
+                        if ch in ("G", "g") and link_idx < len(links) and links[link_idx]:
+                            lane_id = links[link_idx][0][0]
+                            if lane_id not in lanes_for_phase:
+                                lanes_for_phase.append(lane_id)
+                            all_lanes_set.add(lane_id)
+
+                    # In RESCO Cologne, major phases have duration >= 20s (phases 0 and 4),
+                    # while 6s phases (2 and 6) are lagging left-turn clearance stages.
+                    if phase.duration >= 15:
+                        major_phases.append(p_idx)
+                        major_lanes.append(lanes_for_phase)
+
+            self.tl_major_phases[tl] = major_phases
+            self.tl_major_lanes[tl] = major_lanes
+            self.tl_all_lanes[tl] = sorted(all_lanes_set)
+
+            self.current_action_idx[tl] = 0
+            self.elapsed_green[tl] = 0
+            self.transition_queue[tl] = []
+            self.target_action_idx[tl] = 0
+
+            traci.trafficlight.setPhase(tl, major_phases[0])
+            traci.trafficlight.setPhaseDuration(tl, 10000)
+
+    def _extract_phase_features(self, tl: str) -> List[List[float]]:
+        """
+        Builds the 6D feature vector for each major green phase p of traffic light `tl`:
+          [q_norm, v_norm, w_norm, competing_q_norm, is_active, elapsed_ratio]
+        """
+        phase_lanes_list = self.tl_major_lanes[tl]
+        raw_queues = []
+        raw_vehs = []
+        raw_waits = []
+
+        for lanes in phase_lanes_list:
+            n_lanes = max(1, len(lanes))
+            q = sum(traci.lane.getLastStepHaltingNumber(l) for l in lanes) / (n_lanes * 8.0)
+            v = sum(traci.lane.getLastStepVehicleNumber(l) for l in lanes) / (n_lanes * 12.0)
+            w = min(1.0, sum(traci.lane.getWaitingTime(l) for l in lanes) / (n_lanes * 150.0))
+            raw_queues.append(q)
+            raw_vehs.append(v)
+            raw_waits.append(w)
+
+        cur_a = self.current_action_idx[tl]
+        elapsed_ratio = min(1.0, self.elapsed_green[tl] / float(self.max_green))
+
+        features = []
+        for idx in range(len(phase_lanes_list)):
+            other_qs = [raw_queues[j] for j in range(len(phase_lanes_list)) if j != idx]
+            max_other_q = max(other_qs) if other_qs else 0.0
+            is_act = 1.0 if idx == cur_a else 0.0
+            features.append(
+                [
+                    raw_queues[idx],
+                    raw_vehs[idx],
+                    raw_waits[idx],
+                    max_other_q,
+                    is_act,
+                    elapsed_ratio,
+                ]
+            )
+        return features
+
+    def _select_next_phase_idx(self, tl: str, phase_features: List[List[float]]) -> int:
+        cur_a = self.current_action_idx[tl]
+        elapsed = self.elapsed_green[tl]
+        num_phases = len(phase_features)
 
         if self.mode == "fixed":
-            # Classic Fixed-Time: blindly switches every 40 seconds
-            return 1 - cur if elapsed >= 40 else cur
+            # Standard Static Fixed-Time Cycle (45s per direction)
+            if elapsed >= 45:
+                return (cur_a + 1) % num_phases
+            return cur_a
 
-        elif self.mode == "actuated":
-            # Classic Sensor-Actuated (Gap-out threshold = 2 vehicles, max_green = 45s)
-            active_q = ns_q if cur == 0 else ew_halt
-            other_q = ew_halt if cur == 0 else ns_q
-            if active_q <= 2 and other_q > 2:
-                return 1 - cur
-            if elapsed >= 45 and other_q > 0:
-                return 1 - cur
-            return cur
+        if elapsed < self.min_green:
+            return cur_a
+
+        if self.mode == "actuated":
+            # Classical Traffic-Actuated (Gap-Out): switches when active queue <= 2 and competing queue > 2
+            lanes_cur = self.tl_major_lanes[tl][cur_a]
+            other_a = (cur_a + 1) % num_phases
+            lanes_other = self.tl_major_lanes[tl][other_a]
+            active_halt = sum(traci.lane.getLastStepHaltingNumber(l) for l in lanes_cur)
+            other_halt = sum(traci.lane.getLastStepHaltingNumber(l) for l in lanes_other)
+
+            if active_halt <= 2 and other_halt > 2:
+                return other_a
+            if elapsed >= 35 and other_halt > 0:
+                return other_a
+            return cur_a
 
         else:
-            # Proposed DQN / Adaptive Pressure Controller
+            # Proposed DQN RL Agent
             if elapsed >= self.max_green:
-                other_q = ew_halt if cur == 0 else ns_q
-                if other_q > 0:
-                    return 1 - cur
-            state = self._get_tl_state(tl_id)
-            return self.agent.select_action(state, evaluate=True)
+                other_a = (cur_a + 1) % num_phases
+                if phase_features[other_a][0] > 0:
+                    return other_a
+            return self.agent.select_action(phase_features, evaluate=not self.train_mode)
+
+    def _build_transition_sequence(self, tl: str, from_action: int, to_action: int) -> List[Tuple[int, int]]:
+        """
+        Builds the safe yellow + lagging left-turn transition sequence between major phases in Cologne.
+        """
+        logic = traci.trafficlight.getAllProgramLogics(tl)[0]
+        num_sumo_phases = len(logic.phases)
+        start_p = self.tl_major_phases[tl][from_action]
+        end_p = self.tl_major_phases[tl][to_action]
+
+        seq = []
+        p = (start_p + 1) % num_sumo_phases
+        while p != end_p:
+            dur = int(logic.phases[p].duration)
+            # Shorten lagging left-turn phase from 6s to 4s for snappier adaptive clearing
+            step_dur = 3 if "y" in logic.phases[p].state.lower() else min(4, dur)
+            seq.append((p, step_dur))
+            p = (p + 1) % num_sumo_phases
+        return seq
 
     def run(self, tripinfo_path: Path | None = None, verbose: bool = True) -> Dict[str, float]:
         try:
@@ -128,7 +216,7 @@ class Corridor3Simulation:
         cmd = [
             sumo_bin,
             "-c",
-            str(SUMOCFG_C3),
+            str(self.sumocfg_path),
             "--seed",
             str(self.seed),
             "--no-warnings",
@@ -140,118 +228,232 @@ class Corridor3Simulation:
             cmd.extend(["--tripinfo-output", str(tripinfo_path)])
 
         traci.start(cmd)
+        self._discover_network_topology()
 
-        for tl_id in INTERSECTIONS:
-            self.current_action[tl_id] = 1
-            self.elapsed_green[tl_id] = 0
-            self.pending_yellow[tl_id] = 0
-            traci.trafficlight.setPhase(tl_id, self.action_to_phase[1])
-            traci.trafficlight.setPhaseDuration(tl_id, 10000)
-
+        start_time = int(traci.simulation.getTime())
+        end_time = start_time + self.sim_duration
         history = []
+        ep_reward = 0.0
+        losses = []
 
-        while traci.simulation.getTime() < self.sim_end:
-            sim_t = int(traci.simulation.getTime())
+        for tl in self.tl_ids:
+            self.prev_features[tl] = self._extract_phase_features(tl)
 
-            # Every 5 seconds, evaluate controller decisions for all 3 intersections
+        while traci.simulation.getTime() < end_time:
+            sim_t = int(traci.simulation.getTime()) - start_time
+
             if sim_t % self.delta_time == 0:
-                for tl_id in INTERSECTIONS:
-                    if self.pending_yellow[tl_id] == 0:
-                        desired = self._decide_action(tl_id)
-                        if desired != self.current_action[tl_id]:
-                            # Trigger 3-second Yellow Phase
-                            yellow_phase = self.action_to_phase[self.current_action[tl_id]] + 1
-                            traci.trafficlight.setPhase(tl_id, yellow_phase)
-                            self.pending_yellow[tl_id] = self.yellow_time
-                            self.target_action[tl_id] = desired
+                for tl in self.tl_ids:
+                    if not self.transition_queue[tl]:
+                        feats = self._extract_phase_features(tl)
+                        desired_idx = self._select_next_phase_idx(tl, feats)
+
+                        # If training DQN from scratch, compute reward for the chosen action based on queue pressure
+                        if self.train_mode:
+                            chosen_f = feats[desired_idx]
+                            # Reward choosing the phase that has higher queue, approaching flow, and wait time than its competitor
+                            pressure_diff = (chosen_f[0] * 3.0 + chosen_f[1] * 1.5 + chosen_f[2] * 2.0) - (
+                                chosen_f[3] * 2.5
+                            )
+                            # Small switching cost if changing phase unnecessarily when active queue is still high
+                            switch_cost = -0.15 if desired_idx != self.current_action_idx[tl] else 0.05
+                            r_tl = pressure_diff + switch_cost
+                            self.agent.store_transition(feats, desired_idx, r_tl, feats, False)
+                            loss = self.agent.update()
+                            if loss > 0:
+                                losses.append(loss)
+                            ep_reward += r_tl
+
+                        self.prev_features[tl] = feats
+
+                        if desired_idx != self.current_action_idx[tl]:
+                            self.transition_queue[tl] = self._build_transition_sequence(
+                                tl, self.current_action_idx[tl], desired_idx
+                            )
+                            self.target_action_idx[tl] = desired_idx
+                            if self.transition_queue[tl]:
+                                first_p, _ = self.transition_queue[tl][0]
+                                traci.trafficlight.setPhase(tl, first_p)
+                                traci.trafficlight.setPhaseDuration(tl, 10000)
 
             traci.simulationStep()
 
-            # Update yellow timers and elapsed green counters
-            total_halting = 0
-            total_co2_mg = 0.0
-            per_tl_info = []
-
-            for tl_id, cfg in INTERSECTIONS.items():
-                if self.pending_yellow[tl_id] > 0:
-                    self.pending_yellow[tl_id] -= 1
-                    if self.pending_yellow[tl_id] == 0:
-                        self.current_action[tl_id] = self.target_action[tl_id]
-                        self.elapsed_green[tl_id] = 0
-                        green_phase = self.action_to_phase[self.current_action[tl_id]]
-                        traci.trafficlight.setPhase(tl_id, green_phase)
-                        traci.trafficlight.setPhaseDuration(tl_id, 10000)
+            for tl in self.tl_ids:
+                if self.transition_queue[tl]:
+                    cur_p, rem_t = self.transition_queue[tl][0]
+                    rem_t -= 1
+                    if rem_t <= 0:
+                        self.transition_queue[tl].pop(0)
+                        if self.transition_queue[tl]:
+                            next_p, _ = self.transition_queue[tl][0]
+                            traci.trafficlight.setPhase(tl, next_p)
+                            traci.trafficlight.setPhaseDuration(tl, 10000)
+                        else:
+                            self.current_action_idx[tl] = self.target_action_idx[tl]
+                            self.elapsed_green[tl] = 0
+                            green_p = self.tl_major_phases[tl][self.current_action_idx[tl]]
+                            traci.trafficlight.setPhase(tl, green_p)
+                            traci.trafficlight.setPhaseDuration(tl, 10000)
+                    else:
+                        self.transition_queue[tl][0] = (cur_p, rem_t)
                 else:
-                    self.elapsed_green[tl_id] += 1
+                    self.elapsed_green[tl] += 1
 
-                ns_q = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["NS"])
-                ew_q = sum(traci.lane.getLastStepHaltingNumber(l) for l in cfg["EW"])
-                lanes = cfg["NS"] + cfg["EW"]
-                total_halting += ns_q + ew_q
-                total_co2_mg += sum(traci.lane.getCO2Emission(l) for l in lanes)
-                phase_str = "KG-YESIL" if self.current_action[tl_id] == 0 else "DB-YESIL"
-                per_tl_info.append(f"{tl_id}[{phase_str} {self.elapsed_green[tl_id]:2d}s | Kuyruk KG:{ns_q:2d} DB:{ew_q:2d}]")
+            # Sample corridor queue and CO2 metrics every delta_time (5s)
+            if sim_t % self.delta_time == 0:
+                total_halting = 0
+                total_co2_mg = 0.0
+                per_tl_status = []
+                for idx, tl in enumerate(self.tl_ids, 1):
+                    lanes = self.tl_all_lanes[tl]
+                    halt = sum(traci.lane.getLastStepHaltingNumber(l) for l in lanes)
+                    co2 = sum(traci.lane.getCO2Emission(l) for l in lanes) * self.delta_time
+                    total_halting += halt
+                    total_co2_mg += co2
+                    short_name = f"Kavsak-{idx}({tl[:6]})"
+                    per_tl_status.append(
+                        f"{short_name}[AnaFaz-{self.current_action_idx[tl]} ({self.elapsed_green[tl]:2d}s) | Kuyruk:{halt:2d}]"
+                    )
 
-            history.append({"halting_total": total_halting, "co2_g": total_co2_mg / 1000.0})
+                history.append({"halting_total": total_halting, "co2_g": total_co2_mg / 1000.0})
 
-            if verbose and self.use_gui and int(traci.simulation.getTime()) % 10 == 0:
-                t_now = int(traci.simulation.getTime())
-                regime = (
-                    "Rejim-1 (Dogu-Bati Ana Koridor Yogun)"
-                    if t_now < 600
-                    else ("Rejim-2 (Kuzey-Guney Yan Caddeler Yogun)" if t_now < 1200 else "Rejim-3 (Tum Yonler Zirve Saat)")
-                )
-                print(
-                    f"[t={t_now:4d}s | Mod: {self.mode.upper():8s} | {regime}]\n"
-                    f"   " + "  ||  ".join(per_tl_info) + f"  => Toplam Kuyruk: {total_halting:3d} arac"
-                )
+                if verbose and self.use_gui and sim_t % 10 == 0:
+                    clock_h = int(traci.simulation.getTime()) // 3600
+                    clock_m = (int(traci.simulation.getTime()) % 3600) // 60
+                    clock_s = int(traci.simulation.getTime()) % 60
+                    print(
+                        f"[Koln Saat {clock_h:02d}:{clock_m:02d}:{clock_s:02d} (t={sim_t:4d}s) | Mod: {self.mode.upper():8s}]\n"
+                        f"   " + " || ".join(per_tl_status) + f" => Toplam Kuyruk: {total_halting:3d} arac"
+                    )
 
         traci.close()
+
+        avg_q = sum(h["halting_total"] for h in history) / max(1, len(history))
+        co2_kg = sum(h["co2_g"] for h in history) / 1000.0
+        avg_wait = 0.0
+        avg_loss = 0.0
+        avg_dur = 0.0
+        completed = 0
 
         if tripinfo_path and tripinfo_path.exists():
             tree = ET.parse(tripinfo_path)
             trips = tree.getroot().findall("tripinfo")
-            n = max(1, len(trips))
+            completed = len(trips)
+            n = max(1, completed)
             avg_wait = sum(float(t.attrib.get("waitingTime", 0.0)) for t in trips) / n
             avg_loss = sum(float(t.attrib.get("timeLoss", 0.0)) for t in trips) / n
             avg_dur = sum(float(t.attrib.get("duration", 0.0)) for t in trips) / n
-            avg_q = sum(h["halting_total"] for h in history) / max(1, len(history))
-            co2_kg = sum(h["co2_g"] for h in history) / 1000.0
-            return {
-                "mode": self.mode,
-                "completed_trips": len(trips),
-                "avg_waiting_time_s": round(avg_wait, 2),
-                "avg_time_loss_s": round(avg_loss, 2),
-                "avg_travel_time_s": round(avg_dur, 2),
-                "avg_corridor_queue_veh": round(avg_q, 2),
-                "total_co2_kg": round(co2_kg, 2),
-            }
-        return {}
+
+        return {
+            "mode": self.mode,
+            "completed_trips": completed,
+            "avg_waiting_time_s": round(avg_wait, 2),
+            "avg_time_loss_s": round(avg_loss, 2),
+            "avg_travel_time_s": round(avg_dur, 2),
+            "avg_corridor_queue_veh": round(avg_q, 2),
+            "total_co2_kg": round(co2_kg, 2),
+            "ep_reward": round(ep_reward, 1),
+            "avg_loss": round(sum(losses) / max(1, len(losses)), 4),
+        }
+
+
+def train_dqn_from_scratch(episodes: int = 6) -> DQNAgent:
+    """
+    Trains the Phase-Competition DQN Agent FROM SCRATCH (100% random He weights)
+    on the real RESCO Cologne network and records the learning curve.
+    """
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    MODELS_DIR = BASE_DIR / "models"
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+
+    agent = DQNAgent(seed=42)
+    best_wait = float("inf")
+    training_rows = []
+
+    print("========================================================================================")
+    print(f"   GERCEK KOLN (RESCO COLOGNE-3) AGINDA SIFIRDAN (FROM-SCRATCH) DQN EGITIMI ({episodes} EPISODE)")
+    print("========================================================================================")
+
+    for ep in range(1, episodes + 1):
+        t_path = RESULTS_DIR / f"train_c3_ep{ep}.tripinfo.xml"
+        sim = RealNetworkSimulation(
+            sumocfg_path=SUMOCFG_C3,
+            mode="dqn",
+            use_gui=False,
+            seed=100 + ep * 13,
+            sim_duration=1800,
+            agent=agent,
+            train_mode=True,
+        )
+        m = sim.run(tripinfo_path=t_path, verbose=False)
+        if t_path.exists():
+            t_path.unlink()
+
+        if m["avg_waiting_time_s"] < best_wait:
+            best_wait = m["avg_waiting_time_s"]
+            agent.best_net.copy_from(agent.q_net)
+
+        row = {
+            "episode": ep,
+            "epsilon": round(agent.epsilon, 3),
+            "ep_reward": m["ep_reward"],
+            "avg_waiting_time_s": m["avg_waiting_time_s"],
+            "avg_corridor_queue_veh": m["avg_corridor_queue_veh"],
+            "avg_loss": m["avg_loss"],
+        }
+        training_rows.append(row)
+        print(
+            f"  Episode {ep:02d}/{episodes} | Epsilon: {row['epsilon']:.3f} | "
+            f"Ort. Bekleme: {row['avg_waiting_time_s']:6.2f} sn | "
+            f"Ort. Kuyruk: {row['avg_corridor_queue_veh']:5.2f} arac | Loss: {row['avg_loss']:.4f}"
+        )
+
+    agent.q_net.copy_from(agent.best_net)
+    agent.save(MODEL_PATH)
+
+    train_csv = RESULTS_DIR / "training_log.csv"
+    with train_csv.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=list(training_rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(training_rows)
+
+    print(f"\n[OK] Sifirdan egitilen DQN modeli kaydedildi: {MODEL_PATH}\n")
+    return agent
 
 
 def run_benchmark_comparison():
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+    if not MODEL_PATH.exists():
+        train_dqn_from_scratch(episodes=6)
+
     modes = [
-        ("fixed", "1. Fixed-Time (Sabit Sureli)"),
-        ("actuated", "2. Actuated (Klasik Sensorlu)"),
-        ("dqn", "3. DQN RL (Akilli Adaptif - Onerilen)"),
+        ("fixed", "1. Fixed-Time (Sabit Sureli Klasik)"),
+        ("actuated", "2. Actuated (Klasik Sensorlu Gap-Out)"),
+        ("dqn", "3. DQN RL (Sifirdan Egitilen Akilli Ajan)"),
     ]
     rows = []
     print("========================================================================================")
-    print("   COLOGNE-3 (3 ARDISIK KAVSAKLI KORIDOR) - 3 FARKLI DURUM KARSILASTIRMA TESTI")
+    print("   GERCEK KOLN HARITASI (RESCO COLOGNE-3: 3 KAVSAK) - 3 DURUM KARSILASTIRMA TESTI")
     print("========================================================================================")
     for code, label in modes:
-        t_path = RESULTS_DIR / f"c3_{code}.tripinfo.xml"
-        sim = Corridor3Simulation(mode=code, use_gui=False, seed=42)
+        t_path = RESULTS_DIR / f"c3_real_{code}.tripinfo.xml"
+        sim = RealNetworkSimulation(
+            sumocfg_path=SUMOCFG_C3,
+            mode=code,
+            use_gui=False,
+            seed=42,
+            sim_duration=1800,
+            train_mode=False,
+        )
         metrics = sim.run(tripinfo_path=t_path, verbose=False)
         if t_path.exists():
             t_path.unlink()
         metrics["label"] = label
         rows.append(metrics)
         print(
-            f"  {label:38s} | Ort. Bekleme: {metrics['avg_waiting_time_s']:6.2f} sn | "
-            f"Koridor Kuyrugu: {metrics['avg_corridor_queue_veh']:5.2f} arac | "
-            f"Seyahat Suresi: {metrics['avg_travel_time_s']:6.2f} sn | CO2: {metrics['total_co2_kg']:6.2f} kg"
+            f"  {label:40s} | Ort. Bekleme: {metrics['avg_waiting_time_s']:6.2f} sn | "
+            f"Kuyruk: {metrics['avg_corridor_queue_veh']:5.2f} arac | "
+            f"Seyahat: {metrics['avg_travel_time_s']:6.2f} sn | CO2: {metrics['total_co2_kg']:6.2f} kg"
         )
 
     base_wait = rows[0]["avg_waiting_time_s"]
@@ -270,8 +472,20 @@ def run_benchmark_comparison():
 
 if __name__ == "__main__":
     arg = sys.argv[1].lower() if len(sys.argv) > 1 else "compare"
-    if arg in ("fixed", "actuated", "dqn"):
-        sim = Corridor3Simulation(mode=arg, use_gui=True, seed=42)
+    if arg == "train":
+        train_dqn_from_scratch(episodes=6)
+        run_benchmark_comparison()
+    elif arg in ("fixed", "actuated", "dqn"):
+        if arg == "dqn" and not MODEL_PATH.exists():
+            train_dqn_from_scratch(episodes=6)
+        sim = RealNetworkSimulation(
+            sumocfg_path=SUMOCFG_C3,
+            mode=arg,
+            use_gui=True,
+            seed=42,
+            sim_duration=1800,
+            train_mode=False,
+        )
         sim.run(verbose=True)
     else:
         run_benchmark_comparison()
