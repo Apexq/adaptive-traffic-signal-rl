@@ -13,7 +13,7 @@ echo Simdi arka planda sirasiyla:
 echo   1) Fixed-Time (Sabit Sureli)
 echo   2) Actuated (Klasik Sensorlu)
 echo   3) DQN RL (Akilli Adaptif - Onerilen)
-echo 1800 saniye boyunca 3 kavsakli koridorda calistirilip sonuclar karsilastiriliyor...
+echo 3600 saniye boyunca 3 kavsakli koridorda calistirilip sonuclar karsilastiriliyor...
 echo.
 "%PY_CMD%" "%~dp0src\corridor3_runner.py" compare
 echo.

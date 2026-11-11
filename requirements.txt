@@ -1,15 +1,12 @@
-# Core SUMO & XML Libraries (Bundled with Eclipse SUMO 1.28+ or via pip)
-lxml>=6.0.0
-python-docx>=1.1.0
-requests>=2.31.0
+# Core: Python >=3.10 and an installed Eclipse SUMO executable.
+# Prefer the TraCI tools bundled with the same SUMO version via SUMO_HOME.
+# This dependency supports installations that import TraCI from pip instead.
+traci>=1.27,<2.0
 
-# Data Analysis & Plotting (Optional / Recommended)
-numpy>=2.0.0
-pandas>=2.2.0
-matplotlib>=3.9.0
-
-# Reinforcement Learning Extensions (For Python 3.11-3.13 environments)
-# gymnasium>=1.0.0
-# sumo-rl>=1.4.5
-# stable-baselines3>=2.4.0
-# torch>=2.5.0
+# Optional legacy analysis/document dependencies (not required by training/tests):
+# numpy>=2.0
+# pandas>=2.2
+# matplotlib>=3.9
+# lxml>=6.0
+# python-docx>=1.1
+# requests>=2.31

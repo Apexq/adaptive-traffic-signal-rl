@@ -21,3 +21,6 @@ scratch/
 Thumbs.db
 .vscode/
 .idea/
+
+# Versioned experiment outputs (legacy models/results remain tracked)
+artifacts/

@@ -9,6 +9,8 @@ if exist "%~dp0.venv\Scripts\python.exe" (
 echo ========================================================================================
 echo   EGITIMI SIFIRLA VE 1. BOLUMDEN BASTAN BASLAT
 echo ========================================================================================
-"%PY_CMD%" -u "%~dp0src\corridor3_runner.py" train --reset
+set "RUN_DIR=%~dp0artifacts\v2\cologne3-fresh-%RANDOM%-%RANDOM%"
+echo Yeni egitim dizini: %RUN_DIR%
+"%PY_CMD%" -u "%~dp0src\corridor3_runner.py" train --output-dir "%RUN_DIR%"
 echo.
 pause

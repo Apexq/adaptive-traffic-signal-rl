@@ -9,15 +9,14 @@ and SUMO configurations (.sumocfg) for:
 import subprocess
 from pathlib import Path
 
-SUMO_BIN = Path(r"C:\Program Files (x86)\SUMO\bin")
-NETCONVERT = SUMO_BIN / "netconvert.exe"
+from runtime import sumo_binary
 BASE_DIR = Path(__file__).resolve().parent.parent
 NETS_DIR = BASE_DIR / "nets"
 
 
 def build_cologne1_network() -> Path:
     """Builds the Cologne-1 single intersection benchmark (3-lane approaches)."""
-    scen_dir = NETS_DIR / "cologne1"
+    scen_dir = NETS_DIR / "synthetic1"
     scen_dir.mkdir(parents=True, exist_ok=True)
 
     nod_xml = """<?xml version="1.0" encoding="UTF-8"?>
@@ -48,7 +47,7 @@ def build_cologne1_network() -> Path:
     net_file = scen_dir / "cologne1.net.xml"
     subprocess.run(
         [
-            str(NETCONVERT),
+            sumo_binary("netconvert"),
             f"--node-files={scen_dir / 'cologne1.nod.xml'}",
             f"--edge-files={scen_dir / 'cologne1.edg.xml'}",
             f"--output-file={net_file}",
@@ -151,7 +150,7 @@ def build_cologne3_network() -> Path:
         J1 (-250, 0) [TL_1] --- J2 (0, 0) [TL_2] --- J3 (250, 0) [TL_3]
       - Each intersection has North and South cross-streets (N1/S1, N2/S2, N3/S3).
     """
-    scen_dir = NETS_DIR / "cologne3"
+    scen_dir = NETS_DIR / "synthetic3"
     scen_dir.mkdir(parents=True, exist_ok=True)
 
     nod_xml = """<?xml version="1.0" encoding="UTF-8"?>
@@ -215,7 +214,7 @@ def build_cologne3_network() -> Path:
     net_file = scen_dir / "cologne3.net.xml"
     subprocess.run(
         [
-            str(NETCONVERT),
+            sumo_binary("netconvert"),
             f"--node-files={scen_dir / 'cologne3.nod.xml'}",
             f"--edge-files={scen_dir / 'cologne3.edg.xml'}",
             f"--output-file={net_file}",
