@@ -1,6 +1,6 @@
 # RULES.md — Kodlama Standartları ve Sistem Koruma Kuralları
 
-Bu doküman, mevcut çalışan **NeurIPS 2021 RESCO Cologne-3** trafik kontrol sistemini, eğitilmiş model ağırlıklarını (`models/dqn_resco_cologne.json`) ve resmi karşılaştırma sonuçlarını bozmamak için tüm geliştiricilerin ve yapay zeka (AI) asistanlarının uyması gereken **zorunlu kuralları** tanımlar.
+Bu doküman, mevcut çalışan **NeurIPS 2021 RESCO Cologne-3** trafik kontrol sistemini, eğitilmiş model ağırlıklarını (`models/dqn_resco_cologne.json`) ve resmi karşılaştırma sonuçlarını bozmamak için projeye katkı sağlayan tüm geliştiricilerin ve araştırmacıların uyması gereken **zorunlu kuralları** tanımlar.
 
 ---
 

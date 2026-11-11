@@ -108,7 +108,7 @@ BT /F1 7.80 Tf 0.450 0.500 0.580 rg 34.00 18.00 Td (Sayfa 1 / 2  -  MCB\334 Bilg
 endstream
 endobj
 6 0 obj
-<< /Length 8566 >>
+<< /Length 8403 >>
 stream
 BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 803.89 Td (4. DEPO \(REPOSITORY\) DOSYA YAPISI VE \326NEMLI MOD\334LLER) Tj ET
 q 0.150 0.390 0.920 RG 1.40 w 34.00 799.89 m 561.28 799.89 l S Q
@@ -138,40 +138,39 @@ BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 558.19 Td (2_Mod_Sensorlu_Actuated_3Ka
 BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 546.39 Td (\225) Tj ET
 BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 546.39 Td (Egitime Devam Etmek veya Sifirdan Baslatmak:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( 5_Egitimi_Baslat_veya_Devam_Et.bat \(Checkpoint'ten) Tj ET
 BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 534.59 Td (devam eder\)  |  6_Egitimi_Sifirla_Bastan_Baslat.bat) Tj ET
-BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 518.79 Td (6. ARKADASIN YAPAY ZEKA ARACI I\307IN BAGLAM VE FINAL G\326REVLERI \(AI PROMPT REHBERI\)) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 518.79 Td (6. GELECEK \307ALISMALAR VE FINAL D\326NEMI YOL HARITASI \(FUTURE WORK & ROADMAP\)) Tj ET
 q 0.150 0.390 0.920 RG 1.40 w 34.00 514.79 m 561.28 514.79 l S Q
 q 0.920 0.950 1.000 rg 0.150 0.390 0.920 RG 0.8 w 34.00 475.79 527.28 34.00 re B Q
-BT /F2 8.40 Tf 0.100 0.240 0.650 rg 42.00 496.79 Td (BU DOK\334MANI OKUYAN YAPAY ZEKA ASISTANINA NOT \(INSTRUCTIONS FOR COLLABORATING AI\):) Tj ET
-BT /F1 8.30 Tf 0.120 0.160 0.230 rg 42.00 484.79 Td (Bu proje MCB\334 Bilgisayar M\374h. Bitirme Projesidir. Vize \(Midterm\) asamasi %100 tamamlanmis ve GitHub'a pushlanmistir.) Tj ET
-BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 463.79 Td (Mevcut \347alisan \347ekirdek dosyalari \(src/rl_agent.py, src/corridor3_runner.py ve) Tj ET
-BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 452.29 Td (models/dqn_resco_cologne.json\) bozmadan, Final \(Haziran\) asamasi i\347in asagidaki 3 mod\374l \374zerinde) Tj ET
-BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 440.79 Td (ekip\347e gelistirme yapilabilir:) Tj ET
-BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 429.29 Td (\225) Tj ET
-BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 429.29 Td (Mod\374l 1 - Multi-Agent Komsu Kavsak Haberlesmesi \(Yesil Dalga / Green Wave\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Su an cologne3) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 417.49 Td (i\347indeki 3 kavsak \(359566, 360086, 360082\) ayni egitilmis DeepPhaseMLP agirliklarini paylasmakta) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 405.69 Td (\(Parameter Sharing\) ancak birbirlerinin anlik kuyruk ve aktif faz bilgisini girdi olarak) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 393.89 Td (almamaktadir. Final asamasinda komsu kavsaktan gelen ara\347 baskisi \(upstream/downstream platoon) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 382.09 Td (pressure\) extract_phase_features fonksiyonuna eklenerek yesil dalga koordinasyonu saglanacaktir.) Tj ET
-BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 370.29 Td (\225) Tj ET
-BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 370.29 Td (Mod\374l 2 - Acil Durum Araci \326nceligi \(Emergency Vehicle Preemption - EVP\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Trafige) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 358.49 Td (ambulans/itfaiye \(vType='emergency'\) eklendiginde, TraCI ile gelen seritte acil durum araci) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 346.69 Td (algilanirsa g\374venlik kisitlarini \(min_green ve 3 sn sari isik\) ihlal etmeden ilgili fazin) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 334.89 Td (\366ncelikli olarak yesile a\347ilmasi \(preemption override\) saglanacaktir.) Tj ET
-BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 323.09 Td (\225) Tj ET
-BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 323.09 Td (Mod\374l 3 - Canli Performans ve Karsilastirma Dashboard'u:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( results/training_log.csv ve) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 311.29 Td (results/cologne3_corridor_summary.csv \347iktilari ile canli TraCI telemetri verilerini) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 299.49 Td (g\366rsellestiren interaktif bir aray\374z \(Streamlit veya Web Dashboard\) eklenecektir.) Tj ET
-BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 283.69 Td (7. TEKNIK DOGRULAMA \326ZETI \(NEDEN SISTEM GER\307EK\307I VE AKADEMIK OLARAK SAGLAM?\)) Tj ET
-q 0.150 0.390 0.920 RG 1.40 w 34.00 279.69 m 561.28 279.69 l S Q
-BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 268.69 Td (\225) Tj ET
-BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 268.69 Td (Adil ve Birebir Ayni Test Ortami \(Zero Cheat\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( \334\347 kontrol modu da \(Fixed-Time, Actuated, DQN RL\)) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 256.89 Td (birebir ayni cologne3.rou.xml ara\347 rotalari ve ayni seed=42 ile kosulmaktadir. Kuyruk, bekleme) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 245.09 Td (s\374resi ve CO2 verileri dogrudan SUMO TraCI API'sinden \(getLastStepHaltingNumber, getWaitingTime,) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 233.29 Td (getCO2Emission\) saniye saniye \366l\347\374lmektedir.) Tj ET
-BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 221.49 Td (\225) Tj ET
-BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 221.49 Td (Ger\347ek Sinir Agi Egitimi:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( models/dqn_resco_cologne.json i\347indeki agirliklar %100 rastgele) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 209.69 Td (baslatilip 50 saatlik sim\374lasyon verisi \374zerinde Bellman hata geri yayilimi \(backpropagation\)) Tj ET
-BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 197.89 Td (ile egitilmistir.) Tj ET
+BT /F2 8.40 Tf 0.100 0.240 0.650 rg 42.00 496.79 Td (PROJE VIZYONU VE FINAL ASAMASI HEDEFLERI \(FINAL MILESTONE ROADMAP\):) Tj ET
+BT /F1 8.30 Tf 0.120 0.160 0.230 rg 42.00 484.79 Td (Bu calisma MCBU Bilgisayar Muh. Bitirme Projesidir. Vize \(Midterm\) hedefleri basariyla tamamlanmis olup,) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 463.79 Td (Mevcut calisan mimariyi \(src/rl_agent.py, src/corridor3_runner.py ve models/dqn_resco_cologne.json\)) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 452.29 Td (bozmadan, Final \(Haziran\) asamasi icin asagidaki 3 temel modul gelistirilecektir:) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 440.79 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 440.79 Td (Mod\374l 1 - Multi-Agent Komsu Kavsak Haberlesmesi \(Yesil Dalga / Green Wave\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Su an cologne3) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 428.99 Td (i\347indeki 3 kavsak \(359566, 360086, 360082\) ayni egitilmis DeepPhaseMLP agirliklarini paylasmakta) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 417.19 Td (\(Parameter Sharing\) ancak birbirlerinin anlik kuyruk ve aktif faz bilgisini girdi olarak) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 405.39 Td (almamaktadir. Final asamasinda komsu kavsaktan gelen ara\347 baskisi \(upstream/downstream platoon) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 393.59 Td (pressure\) extract_phase_features fonksiyonuna eklenerek yesil dalga koordinasyonu saglanacaktir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 381.79 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 381.79 Td (Mod\374l 2 - Acil Durum Araci \326nceligi \(Emergency Vehicle Preemption - EVP\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Trafige) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 369.99 Td (ambulans/itfaiye \(vType='emergency'\) eklendiginde, TraCI ile gelen seritte acil durum araci) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 358.19 Td (algilanirsa g\374venlik kisitlarini \(min_green ve 3 sn sari isik\) ihlal etmeden ilgili fazin) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 346.39 Td (\366ncelikli olarak yesile a\347ilmasi \(preemption override\) saglanacaktir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 334.59 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 334.59 Td (Mod\374l 3 - Canli Performans ve Karsilastirma Dashboard'u:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( results/training_log.csv ve) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 322.79 Td (results/cologne3_corridor_summary.csv \347iktilari ile canli TraCI telemetri verilerini) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 310.99 Td (g\366rsellestiren interaktif bir aray\374z \(Streamlit veya Web Dashboard\) eklenecektir.) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 295.19 Td (7. TEKNIK DOGRULAMA VE AKADEMIK SAGLAMLIK \(TECHNICAL VERIFICATION\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 291.19 m 561.28 291.19 l S Q
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 280.19 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 280.19 Td (Adil ve Birebir Ayni Test Ortami \(Zero Cheat\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( \334\347 kontrol modu da \(Fixed-Time, Actuated, DQN RL\)) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 268.39 Td (birebir ayni cologne3.rou.xml ara\347 rotalari ve ayni seed=42 ile kosulmaktadir. Kuyruk, bekleme) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 256.59 Td (s\374resi ve CO2 verileri dogrudan SUMO TraCI API'sinden \(getLastStepHaltingNumber, getWaitingTime,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 244.79 Td (getCO2Emission\) saniye saniye \366l\347\374lmektedir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 232.99 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 232.99 Td (Ger\347ek Sinir Agi Egitimi:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( models/dqn_resco_cologne.json i\347indeki agirliklar %100 rastgele) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 221.19 Td (baslatilip 50 saatlik sim\374lasyon verisi \374zerinde Bellman hata geri yayilimi \(backpropagation\)) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 209.39 Td (ile egitilmistir.) Tj ET
 BT /F1 7.80 Tf 0.450 0.500 0.580 rg 34.00 18.00 Td (Sayfa 2 / 2  -  GitHub: https://github.com/Apexq/adaptive-traffic-signal-rl.git) Tj ET
 endstream
 endobj
@@ -193,11 +192,11 @@ xref
 0000000279 00000 n 
 0000000431 00000 n 
 0000010955 00000 n 
-0000019572 00000 n 
-0000019669 00000 n 
-0000019771 00000 n 
+0000019409 00000 n 
+0000019506 00000 n 
+0000019608 00000 n 
 trailer
 << /Size 10 /Root 1 0 R >>
 startxref
-19866
+19703
 %%EOF

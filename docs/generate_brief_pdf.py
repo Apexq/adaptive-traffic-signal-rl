@@ -293,16 +293,16 @@ def build_two_page_pdf(out_path: str):
     c.bullet("SUMO-GUI'de 3 Modu Görsel Olarak Izlemek:", "1_Mod_Sabit_Sureli_3Kavsak_Izle.bat  |  2_Mod_Sensorlu_Actuated_3Kavsak_Izle.bat  |  3_Mod_Akilli_RL_DQN_3Kavsak_Izle.bat")
     c.bullet("Egitime Devam Etmek veya Sifirdan Baslatmak:", "5_Egitimi_Baslat_veya_Devam_Et.bat (Checkpoint'ten devam eder)  |  6_Egitimi_Sifirla_Bastan_Baslat.bat")
 
-    # Section 6: Instructions for Friend's AI Assistant
-    c.section_header("6. ARKADASIN YAPAY ZEKA ARACI IÇIN BAGLAM VE FINAL GÖREVLERI (AI PROMPT REHBERI)")
+    # Section 6: Future Work & Final Roadmap
+    c.section_header("6. GELECEK ÇALISMALAR VE FINAL DÖNEMI YOL HARITASI (FUTURE WORK & ROADMAP)")
     info_h = 34
     c.rect_fill(c.margin_x, c.y - info_h + 6, W, info_h, 0.92, 0.95, 1.0, stroke_rgb=(0.15, 0.39, 0.92))
-    c.text(c.margin_x + 8, c.y - 7, "BU DOKÜMANI OKUYAN YAPAY ZEKA ASISTANINA NOT (INSTRUCTIONS FOR COLLABORATING AI):", font="F2", size=8.4, rgb=(0.10, 0.24, 0.65))
-    c.text(c.margin_x + 8, c.y - 19, "Bu proje MCBÜ Bilgisayar Müh. Bitirme Projesidir. Vize (Midterm) asamasi %100 tamamlanmis ve GitHub'a pushlanmistir.", font="F1", size=8.3, rgb=(0.12, 0.16, 0.23))
+    c.text(c.margin_x + 8, c.y - 7, "PROJE VIZYONU VE FINAL ASAMASI HEDEFLERI (FINAL MILESTONE ROADMAP):", font="F2", size=8.4, rgb=(0.10, 0.24, 0.65))
+    c.text(c.margin_x + 8, c.y - 19, "Bu calisma MCBU Bilgisayar Muh. Bitirme Projesidir. Vize (Midterm) hedefleri basariyla tamamlanmis olup,", font="F1", size=8.3, rgb=(0.12, 0.16, 0.23))
     c.y -= (info_h + 6)
 
     c.paragraph(
-        "Mevcut çalisan çekirdek dosyalari (src/rl_agent.py, src/corridor3_runner.py ve models/dqn_resco_cologne.json) bozmadan, Final (Haziran) asamasi için asagidaki 3 modül üzerinde ekipçe gelistirme yapilabilir:",
+        "Mevcut calisan mimariyi (src/rl_agent.py, src/corridor3_runner.py ve models/dqn_resco_cologne.json) bozmadan, Final (Haziran) asamasi icin asagidaki 3 temel modul gelistirilecektir:",
         size=8.8, leading=11.5
     )
     c.bullet(
@@ -319,7 +319,7 @@ def build_two_page_pdf(out_path: str):
     )
 
     # Section 7: Technical Verification Summary
-    c.section_header("7. TEKNIK DOGRULAMA ÖZETI (NEDEN SISTEM GERÇEKÇI VE AKADEMIK OLARAK SAGLAM?)")
+    c.section_header("7. TEKNIK DOGRULAMA VE AKADEMIK SAGLAMLIK (TECHNICAL VERIFICATION)")
     c.bullet(
         "Adil ve Birebir Ayni Test Ortami (Zero Cheat):",
         "Üç kontrol modu da (Fixed-Time, Actuated, DQN RL) birebir ayni cologne3.rou.xml araç rotalari ve ayni seed=42 ile kosulmaktadir. Kuyruk, bekleme süresi ve CO2 verileri dogrudan SUMO TraCI API'sinden (getLastStepHaltingNumber, getWaitingTime, getCO2Emission) saniye saniye ölçülmektedir."
@@ -442,7 +442,7 @@ def build_docx(out_path: str):
         for c_i, val in enumerate(r_data):
             table.rows[r_i].cells[c_i].text = val
 
-    doc.add_heading("4. Arkadaşın Yapay Zeka Aracı İçin Final Aşaması Görevleri", level=2)
+    doc.add_heading("4. Gelecek Çalışmalar ve Final Aşaması Yol Haritası (Future Work & Next Steps)", level=2)
     items_4 = [
         ("Modül 1 - Multi-Agent Komşu Kavşak Haberleşmesi (Yeşil Dalga): ",
          "359566, 360086 ve 360082 kavşaklarının birbirine yaklaşan araç kuyruklarını (platoon pressure) durum vektörüne eklemek."),
@@ -461,8 +461,8 @@ def build_docx(out_path: str):
 
 if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    pdf_path = os.path.join(base_dir, "Proje_Ozeti_ve_AI_Brifingi.pdf")
-    docx_path = os.path.join(base_dir, "Proje_Ozeti_ve_AI_Brifingi.docx")
+    pdf_path = os.path.join(base_dir, "Executive_Summary.pdf")
+    docx_path = os.path.join(base_dir, "Executive_Summary.docx")
     build_two_page_pdf(pdf_path)
     build_docx(docx_path)
     print(f"[OK] Generated PDF: {pdf_path} ({os.path.getsize(pdf_path)} bytes)")

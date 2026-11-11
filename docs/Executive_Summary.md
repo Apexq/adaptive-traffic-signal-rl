@@ -1,4 +1,4 @@
-# PROJE TEKNİK ÖZETİ VE YAPAY ZEKA (AI) BAĞLAM BRİFİNGİ
+# PROJE YÖNETİCİ VE TEKNİK ÖZETİ (EXECUTIVE SUMMARY)
 
 **Proje Adı:** Simulation-Based Intelligent Traffic Management System Using Deep Reinforcement Learning  
 **Kurum / Bölüm:** Manisa Celal Bayar Üniversitesi (MCBÜ) – Bilgisayar Mühendisliği Bitirme Projesi  
@@ -92,7 +92,7 @@ adaptive-traffic-signal-rl/
 
 ---
 
-## 5. Arkadaşın Yapay Zeka Aracı İçin Prompt / Görev Bağlamı (Final Aşaması Yol Haritası)
+## 5. Gelecek Çalışmalar ve Final Dönemi Geliştirme Yol Haritası (Future Work & Next Steps)
 
 Bu projeyi başka bir AI aracına (ChatGPT, Claude, Cursor vb.) verdiğinizde aşağıdaki bağlamı kullanabilirsiniz:
 1. **Mevcut Durum:** Vize aşaması için `src/rl_agent.py` ve `src/corridor3_runner.py` içinde merkezi/paylaşımlı ağırlıklı (Parameter-Sharing) 4 fazlı DQN mimarisi tamamlanmış ve `models/dqn_resco_cologne.json` içine eğitilmiştir.

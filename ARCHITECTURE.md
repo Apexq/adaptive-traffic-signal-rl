@@ -78,9 +78,9 @@ traffic-rl/
     ├── MCBU_Midterm_Report.docx                 # Resmi MCBÜ Vize Raporu (Word)
     ├── MCBU_Midterm_Report.md                   # Resmi MCBÜ Vize Raporu (Markdown)
     ├── generate_midterm_report.py               # Vize raporunu oluşturan Python betiği
-    ├── Proje_Ozeti_ve_AI_Brifingi.pdf           # 2 sayfalık teknik özet ve AI brifing PDF'i
-    ├── Proje_Ozeti_ve_AI_Brifingi.docx          # Teknik özet Word dosyası
-    ├── Proje_Ozeti_ve_AI_Brifingi.md            # Teknik özet Markdown dosyası
+    ├── Executive_Summary.pdf                    # 2 sayfalık yönetici özeti ve teknik değerlendirme raporu (PDF)
+    ├── Executive_Summary.docx                   # Yönetici özeti Word dosyası
+    ├── Executive_Summary.md                     # Yönetici özeti Markdown dosyası
     └── generate_brief_pdf.py                    # 2 sayfalık PDF ve DOCX özetini üreten betik
 ```
 

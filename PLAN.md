@@ -21,7 +21,7 @@ Bu doküman, **`adaptive-traffic-signal-rl`** bitirme projesinde şu ana kadar t
     - `2. Actuated (Klasik Sıralı Sensörlü)`: `31.00 sn` bekleme (`-%6.3`) | `14.02` araç kuyruk | `82.80 kg` $\text{CO}_2$
     - `3. DQN RL (4 Fazlı Akıllı Faz Atlama)`: **`14.40 sn` bekleme (`-%56.5`)** | **`7.30` araç kuyruk (`-%60.2`)** | **`54.80 kg` $\text{CO}_2$ (`-%40.3`)**
 - [x] **Tek Tıkla Çalıştırma Betikleri ve Vize Raporu Dokümantasyonu:**
-  - Kök dizindeki `1..6` numaralı `.bat` başlatıcıları, `results/*.svg` grafikleri, `docs/MCBU_Midterm_Report.docx` resmi vize raporu ve `docs/Proje_Ozeti_ve_AI_Brifingi.pdf` teknik özeti oluşturuldu.
+  - Kök dizindeki `1..6` numaralı `.bat` başlatıcıları, `results/*.svg` grafikleri, `docs/MCBU_Midterm_Report.docx` resmi vize raporu ve `docs/Executive_Summary.pdf` yönetici özeti oluşturuldu.
 
 ---
 

@@ -12,6 +12,10 @@ env/
 detector_output.xml
 sumo_run_*.xml
 
+# Model backups
+models/*_backup.json
+scratch/
+
 # OS / IDE
 .DS_Store
 Thumbs.db
