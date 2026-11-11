@@ -9,9 +9,9 @@ import tempfile
 import threading
 import xml.etree.ElementTree as ET
 
-SCHEMA_VERSION = 2
-FEATURE_SCHEMA = "movement-queue-vehicle-wait-competition-active-major-clock-v2"
-FEATURE_DIM = 7
+SCHEMA_VERSION = 3
+FEATURE_SCHEMA = "movement-queue-vehicle-wait-competition-active-major-clock-horizon-v3"
+FEATURE_DIM = 8
 REWARD_SCHEMA = "discounted-normalized-queue-integral-v2"
 CONNECTION_LOCK = threading.Lock()
 

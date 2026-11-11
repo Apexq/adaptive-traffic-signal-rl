@@ -18,7 +18,7 @@ class TrafficSimulation:
     def __init__(self, sumocfg_path, use_gui=False, seed=42, sim_duration=3600,
                  delta_time=5, yellow_time=3, all_red_time=1,
                  min_green_major=10, min_green_turn=4,
-                 max_green_major=45, max_green_turn=10):
+                 max_green_major=45, max_green_turn=10, finite_horizon=False):
         self.sumocfg_path = Path(sumocfg_path).resolve()
         self.use_gui, self.seed = use_gui, seed
         self.sim_duration, self.delta_time = float(sim_duration), float(delta_time)
@@ -31,6 +31,7 @@ class TrafficSimulation:
             raise ValueError("Simulation durations must be finite and positive")
         if min_green_major > max_green_major or min_green_turn > max_green_turn:
             raise ValueError("Minimum green exceeds maximum green")
+        self.finite_horizon = finite_horizon
         self.conn = None
         self.label = uuid.uuid4().hex
         self.audit = []  # optional bounded diagnostic trace; disabled by default
@@ -39,6 +40,7 @@ class TrafficSimulation:
         self.state = {}
         self.tripinfo_path = None
         self.identity = scenario_identity(self.sumocfg_path)
+        self.identity["finite_horizon"] = finite_horizon
         self.identity["control"] = dict(zip(
             ("duration", "interval", "yellow", "all_red", "min_major", "min_turn", "max_major", "max_turn"),
             map(float, values),
@@ -150,13 +152,14 @@ class TrafficSimulation:
         clock = state["elapsed"] if state["stage"] == "green" else -(
             state["remaining"] + (self.all_red_time if state["stage"] == "yellow" else 0)
         )
+        remaining = max(0.0, (self.end_time - self.conn.simulation.getTime()) / self.sim_duration)
         features, demand = [], []
         for i, (p, (q, v, w)) in enumerate(zip(top["phases"], counts)):
             n = max(1, len(p["lanes"]))
             features.append([queues[i], v / (12.0 * n), min(1.0, w / (150.0 * n)),
                              max((x for j, x in enumerate(queues) if i != j), default=0.0),
                              float(i == active), float(not p["turn"]),
-                             clock / self.max_green_major if i == active else 0.0])
+                             clock / self.max_green_major if i == active else 0.0, remaining])
             demand.append(not p["turn"] or q >= 2 or w >= 25)
         if not demand_mask:
             demand = [True] * len(features)
@@ -241,8 +244,9 @@ class TrafficSimulation:
             ("collisions", self.conn.simulation.getCollidingVehiclesNumber()),
         ):
             self.stats[name] += value
-        self.terminated = self.conn.simulation.getMinExpectedNumber() == 0
-        self.truncated = not self.terminated and self.conn.simulation.getTime() >= self.end_time - 1e-9
+        at_horizon = self.conn.simulation.getTime() >= self.end_time - 1e-9
+        self.terminated = self.conn.simulation.getMinExpectedNumber() == 0 or (self.finite_horizon and at_horizon)
+        self.truncated = not self.terminated and at_horizon
         return self.terminated, self.truncated
 
     def metrics(self):
@@ -278,7 +282,7 @@ def tripinfo_metrics(path):
 class SumoTrafficEnv:
     """Single-TLS custom five-return API sharing the corridor state machine.
 
-    Observations are K x 7 phase features; info['action_mask'] defines legal actions.
+    Observations are K x 8 phase features; info['action_mask'] defines legal actions.
     This class deliberately does not claim gymnasium.Env/SB3 compatibility.
     """
     def __init__(self, sumocfg_path, tl_id=None, use_gui=False, delta_time=5,

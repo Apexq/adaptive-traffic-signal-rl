@@ -42,9 +42,8 @@ python -u src/corridor3_runner.py train --episodes 50 --duration 3600
 ```
 
 Rerun that command to resume the last fully completed episode. Each episode is
-followed by greedy evaluation on three fixed validation seeds. Checkpoint selection
-uses validation queue + insertion-delay vehicle-seconds, **not training-episode
-waiting time**. Exploration decays once per completed episode.
+followed by greedy evaluation on three fixed validation seeds. Checkpoint selection ranks mean validation trip completion rate first, then
+mean queue and insertion delay. Each episode retains per-seed validation results. Exploration decays once per completed episode.
 
 A new experiment must use a new directory; existing checkpoints are not deleted:
 
@@ -76,7 +75,8 @@ Comparison requires a compatible trained model and **never starts training**.
 DQN inference also fails explicitly if the model is missing or incompatible.
 The default held-out test seeds are `20001..20005`; validation uses
 `10001..10003`; training episode `e` uses `100 + 13*e`. Seed overlap is rejected.
-Test results do not select checkpoints. Use the same duration/control settings as
+Test results do not select checkpoints. All seed groups use the same route file,
+so this measures variation under fixed traffic demand. Use the same duration/control settings as
 training; model metadata validates these settings and hashes the network/demand.
 
 For Cologne-1, use `--scenario cologne1` with the corridor CLI. The retained
@@ -103,17 +103,17 @@ an SB3 adapter.
   summed waiting; hard timing constraints always take precedence.
 - Per-phase features: normalized queue, vehicle count, clipped waiting, maximum
   competing normalized queue, active/target indicator, major-phase indicator and
-  normalized phase clock. The clock is negative during clearance. Inputs are
-  **K x 7**, with variable K and no claim that every feature is bounded by 1.
-- Network: `7 -> 64 ReLU -> 64 ReLU -> 1`, independently scoring each phase.
-  The seventh feature makes timing state visible. v1 weights cannot be reused.
+  normalized phase clock, and remaining horizon fraction. The clock is negative during clearance. Inputs are
+  **K x 8**, with variable K and no claim that every feature is bounded by 1.
+- Network: `8 -> 64 ReLU -> 64 ReLU -> 1`, independently scoring each phase.
+  The seventh feature exposes phase timing. The eighth gives the remaining fraction of the episode. v1 weights cannot be reused.
 - Replay entries are completed at the next real decision boundary, not before
   simulation. Reward is the integral of negative halted-vehicle count, normalized
   by `8 * incoming_lane_count * 5`; clearance incurs the same cost. Rewards within
   a transition and its bootstrap use `gamma ** (elapsed_seconds / 5)`.
-- The Bellman maximum uses the next legal-action mask. Natural exhaustion stops
-  bootstrap; an external horizon truncation retains bootstrap and records the final
-  observation. Phase clocks/target state remain observable during clearance.
+- The Bellman maximum uses the next legal-action mask. The training scenario ends at the declared finite horizon or natural exhaustion.
+  Both end conditions stop bootstrap. The standalone environment also exposes
+  an external truncation flag for its custom API.
 - Fixed and actuated baselines follow sequential phases, including empty turns;
   their nominal deadlines are 42/8 and 38/8 seconds respectively, subject to the
   shared safety constraints. Max-pressure is a movement-queue/downstream-occupancy

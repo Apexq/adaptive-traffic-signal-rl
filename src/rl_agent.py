@@ -1,7 +1,7 @@
 """
 Deep Phase-Competition Q-Network (DQN) Agent for Acyclic Multi-Phase Signal Control
 Architecture:
-  - 2 Hidden Layers: 7 inputs -> 64 ReLU -> 64 ReLU -> 1 Q-value output per phase
+  - 2 Hidden Layers: 8 inputs -> 64 ReLU -> 64 ReLU -> 1 Q-value output per phase
   - 100% Random He Initialization (No manual warm-start weights)
   - Experience Replay Buffer + Target Network + Clipped TD Gradients
   - Full Checkpoint Save & Resume Support (can pause/stop at any episode and resume later)
@@ -18,7 +18,7 @@ from runtime import FEATURE_DIM, SCHEMA_VERSION, atomic_json
 
 
 class DeepPhaseMLP:
-    """Three-layer Deep MLP (7 -> 64 -> 64 -> 1) with ReLU activations scoring any signal phase."""
+    """Three-layer Deep MLP (8 -> 64 -> 64 -> 1) with ReLU activations scoring any signal phase."""
 
     def __init__(self, in_dim: int = FEATURE_DIM, h1_dim: int = 64, h2_dim: int = 64, seed: int = 42):
         self.in_dim = in_dim
@@ -84,7 +84,7 @@ class DeepPhaseMLP:
     def from_dict(self, data: dict):
         required = {"w1", "b1", "w2", "b2", "w3", "b3"}
         if not required <= data.keys():
-            raise ValueError("Unsupported/legacy network architecture; retrain with schema v2")
+            raise ValueError("Unsupported/legacy network architecture; retrain with schema v3")
         matrices = ((data["w1"], self.h1_dim, self.in_dim),
                     (data["w2"], self.h2_dim, self.h1_dim))
         for matrix, rows, cols in matrices:
@@ -104,7 +104,7 @@ class DeepPhaseMLP:
 
 class DQNAgent:
     """
-    Deep Phase-Competition Q-Network Agent (7 -> 64 -> 64 -> 1)
+    Deep Phase-Competition Q-Network Agent (8 -> 64 -> 64 -> 1)
     Supports Acyclic Smart Phase Selection, Experience Replay, Target Network,
     and full Checkpoint Save/Resume.
     """
@@ -282,7 +282,7 @@ class DQNAgent:
     def _read_payload(self, path):
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         if data.get("schema_version") != SCHEMA_VERSION:
-            raise ValueError("Legacy/incompatible model: schema v2 requires fresh training")
+            raise ValueError("Legacy/incompatible model: schema v3 requires fresh training")
         if self.metadata and data.get("metadata") != self.metadata:
             raise ValueError("Model scenario or experiment configuration mismatch")
         return data
@@ -322,10 +322,10 @@ class DQNAgent:
             return tuple(map(tuples, value)) if isinstance(value, list) else value
         candidate.rng.setstate(tuples(data["rng_state"]))
         if (not 0 <= data["epsilon"] <= 1 or data["train_steps"] < 0
-                or not math.isfinite(data["best_score"]) or data["last_episode"] < 0):
+                or not all(math.isfinite(v) for v in (data["best_score"] if isinstance(data["best_score"], list) else [data["best_score"]])) or data["last_episode"] < 0):
             raise ValueError("Invalid checkpoint training counters")
         candidate.epsilon = data["epsilon"]
         candidate.train_steps = data["train_steps"]
         candidate.metadata = data["metadata"]
         self.__dict__.update(candidate.__dict__)
-        return int(data["last_episode"]), float(data["best_score"]), list(data["training_rows"])
+        return int(data["last_episode"]), tuple(data["best_score"]) if isinstance(data["best_score"], list) else float(data["best_score"]), list(data["training_rows"])

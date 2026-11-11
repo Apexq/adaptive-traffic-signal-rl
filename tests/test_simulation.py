@@ -134,7 +134,7 @@ class SumoTests(unittest.TestCase):
         self.assertTrue(any(t[0] != t[3] for t in transitions))
         self.assertTrue(all(t[0] is not t[3] for t in transitions))
         self.assertTrue(all(t[2] <= 0 for t in transitions))
-        self.assertEqual(sum(t[6] for t in transitions), 3)
+        self.assertEqual(sum(t[4] for t in transitions), 3)
         self.assertTrue(all(t[7] > 0 for t in transitions))
         self.assertEqual(result["remaining_vehicles"], result["unfinished_trips"])
         self.assertEqual(result["departed_vehicles"], result["completed_trips"] + result["remaining_vehicles"])
@@ -164,7 +164,7 @@ class SumoTests(unittest.TestCase):
             result = sim.run(verbose=False)
             self.assertEqual(result["simulated_seconds"], 60)
             self.assertEqual(len(sim.engine.audit), 120)
-            self.assertTrue(result["truncated"])
+            self.assertTrue(result["terminated"])
         broken = RealNetworkSimulation(C3, mode="fixed", sim_duration=10)
         with patch.object(broken.engine, "tick", side_effect=RuntimeError("injected failure")):
             with self.assertRaises(RuntimeError):

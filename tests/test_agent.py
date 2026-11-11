@@ -21,7 +21,7 @@ class AgentTests(unittest.TestCase):
     def test_reject_flat_and_invalid_mask(self):
         agent = DQNAgent()
         with self.assertRaises(ValueError):
-            agent.select_action([0.] * 8)
+            agent.select_action([0.] * 9)
         with self.assertRaises(ValueError):
             agent.select_action(self.features(), [False, False])
         with self.assertRaises(ValueError):
@@ -117,7 +117,7 @@ class AgentTests(unittest.TestCase):
     def test_nonfinite_and_wrong_dimensions(self):
         network = DeepPhaseMLP()
         with self.assertRaises(ValueError):
-            network.forward_single_phase([0.] * 8)
+            network.forward_single_phase([0.] * 9)
         with self.assertRaises(ValueError):
             network.forward_single_phase([math.nan] * FEATURE_DIM)
         state = network.to_dict()

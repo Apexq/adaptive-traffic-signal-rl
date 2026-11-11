@@ -11,7 +11,7 @@ from runtime import atomic_json
 def validate(output, full_duration=3600):
     report = {"purpose": "pre-training acceptance, not trained-policy performance", "runs": []}
     config = BASE_DIR / "nets/cologne3/cologne3.sumocfg"
-    # Exercise the real 7-64-64-1 learner over independent short episodes.
+    # Exercise the real 8-64-64-1 learner over independent short episodes.
     for seed in (113, 126, 139):
         agent = DQNAgent(seed=42)
         started = time.perf_counter()
@@ -21,7 +21,7 @@ def validate(output, full_duration=3600):
         assert agent.train_steps > 0 and metrics["transitions"] > 0
         assert math.isfinite(metrics["avg_loss"])
         assert any(t[0] != t[3] for t in agent.replay_buffer)
-        assert sum(t[6] for t in agent.replay_buffer) == 3
+        assert sum(t[4] for t in agent.replay_buffer) == 3
         assert not metrics["teleports"] and not metrics["collisions"]
         report["runs"].append({"kind": "120s learner smoke", "wall_seconds": time.perf_counter()-started,
                                 "train_steps": agent.train_steps, **metrics})

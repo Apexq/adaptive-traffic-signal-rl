@@ -48,7 +48,7 @@ class RealNetworkSimulation:
             raise ValueError(f"Unknown controller: {mode}")
         if train_mode and mode != "dqn":
             raise ValueError("Only DQN supports training")
-        self.engine = TrafficSimulation(sumocfg_path, use_gui, seed, sim_duration)
+        self.engine = TrafficSimulation(sumocfg_path, use_gui, seed, sim_duration, finite_horizon=True)
         self.mode, self.train_mode = mode, train_mode
         self.engine.baseline_mode = mode
         self.agent = agent
@@ -137,7 +137,12 @@ def validation_score(agent, config, duration, seeds=VALIDATION_SEEDS):
                                  sim_duration=duration).run(verbose=False) for seed in seeds]
     if any(r["collisions"] or r["teleports"] for r in rows):
         raise RuntimeError("Validation contains collisions/teleports; inspect the scenario")
-    return statistics.mean(r["selection_cost"] for r in rows), rows
+    for row in rows:
+        demand = row["completed_trips"] + row["unfinished_trips"] + row["undeparted_trips"]
+        row["completion_rate"] = row["completed_trips"] / demand if demand else 0.0
+    score = (-statistics.mean(r["completion_rate"] for r in rows),
+             statistics.mean(r["selection_cost"] for r in rows))
+    return score, rows
 
 
 def train_dqn_checkpointed(total_episodes=50, sim_duration=3600, reset_ckpt=False,
@@ -146,7 +151,8 @@ def train_dqn_checkpointed(total_episodes=50, sim_duration=3600, reset_ckpt=Fals
     if total_episodes <= 0 or not validation_seeds:
         raise ValueError("Positive episode count and validation seeds required")
     training_seeds = {100 + ep * 13 for ep in range(1, total_episodes + 1)}
-    if training_seeds.intersection(validation_seeds) or training_seeds.intersection(TEST_SEEDS):
+    if (training_seeds.intersection(validation_seeds) or training_seeds.intersection(TEST_SEEDS)
+            or set(validation_seeds).intersection(TEST_SEEDS)):
         raise ValueError("Training, validation and test seeds must be disjoint")
     directory = Path(output_dir) if output_dir else ARTIFACT_DIR / Path(sumocfg_path).stem
     directory.mkdir(parents=True, exist_ok=True)
@@ -157,8 +163,8 @@ def train_dqn_checkpointed(total_episodes=50, sim_duration=3600, reset_ckpt=Fals
         lock.write("Training in progress. Remove only after confirming no training process is running.\n")
     try:
         agent = DQNAgent(seed=42)
-        agent.metadata = TrafficSimulation(sumocfg_path, sim_duration=sim_duration).identity
-        start_ep, best_score, rows = 1, math.inf, []
+        agent.metadata = TrafficSimulation(sumocfg_path, sim_duration=sim_duration, finite_horizon=True).identity
+        start_ep, best_score, rows = 1, (math.inf, math.inf), []
         manifest_path = directory / "experiment.json"
         manifest = {"metadata": agent.metadata, "validation_seeds": list(validation_seeds),
                     "test_seeds": list(TEST_SEEDS), "training_seed_rule": "100 + episode * 13"}
@@ -188,15 +194,16 @@ def train_dqn_checkpointed(total_episodes=50, sim_duration=3600, reset_ckpt=Fals
                     agent.best_net.copy_from(agent.q_net)
                 rows.append(dict(episode=ep, epsilon=agent.epsilon, ep_reward=metrics["ep_reward"],
                     avg_loss=metrics["avg_loss"], training_cost=metrics["selection_cost"],
-                    validation_cost=score, best_validation_cost=best_score,
+                    validation_cost=score[1], best_validation_cost=best_score[1],
+                    validation_completion_rate=-score[0], best_validation_completion_rate=-best_score[0],
                     wall_seconds=time.perf_counter() - started))
                 agent.decay_epsilon_episode()
                 agent.save_checkpoint(checkpoint, ep, total_episodes, best_score, rows)
                 agent.save(model, best=True)
                 write_csv(directory / "training_log.csv", rows)
-                write_csv(directory / "last_validation.csv", validation_rows)
-                print(f"Episode {ep}/{total_episodes}: validation={score:.1f}, "
-                      f"best={best_score:.1f}, epsilon={agent.epsilon:.3f}", flush=True)
+                write_csv(directory / f"validation_ep{ep:03d}.csv", validation_rows)
+                print(f"Episode {ep}/{total_episodes}: validation={score[1]:.1f}, completion={-score[0]:.2%}, "
+                      f"best completion={-best_score[0]:.2%}, epsilon={agent.epsilon:.3f}", flush=True)
         except KeyboardInterrupt:
             print("Interrupted. Only the last fully completed episode is resumable.")
             return None
