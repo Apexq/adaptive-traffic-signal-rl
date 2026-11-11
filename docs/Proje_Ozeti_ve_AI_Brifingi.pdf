@@ -1,0 +1,203 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 7 0 R /F2 8 0 R /F3 9 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 7 0 R /F2 8 0 R /F3 9 0 R >> >> /Contents 6 0 R >>
+endobj
+5 0 obj
+<< /Length 10472 >>
+stream
+q 0.060 0.090 0.200 rg 34.00 773.89 527.28 46.00 re f Q
+BT /F2 12.50 Tf 1.000 1.000 1.000 rg 46.00 800.89 Td (PROJE TEKNIK \326ZETI VE YAPAY ZEKA \(AI\) BAGLAM BRIFINGI) Tj ET
+BT /F1 8.60 Tf 0.820 0.880 0.980 rg 46.00 784.89 Td (Simulation-Based Intelligent Traffic Management System Using Deep Reinforcement Learning \(MCB\334 Bitirme Projesi\)) Tj ET
+q 0.960 0.970 0.990 rg 0.750 0.810 0.880 RG 0.8 w 34.00 731.89 527.28 34.00 re B Q
+BT /F2 8.40 Tf 0.060 0.090 0.160 rg 42.00 751.89 Td (GitHub Repo: https://github.com/Apexq/adaptive-traffic-signal-rl.git \(main branch - 50 epizot egitilmis model pushlu\)) Tj ET
+BT /F1 8.40 Tf 0.200 0.250 0.330 rg 42.00 738.89 Td (Teknoloji: Eclipse SUMO 1.28.0 + Python 3.14 \(TraCI & sumolib\)  |  Veri Seti: NeurIPS 2021 RESCO \(K\366ln, Almanya\)) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 717.89 Td (1. GER\307EK D\334NYA HARITASI VE VERI SETI \(NEURIPS 2021 RESCO BENCHMARK\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 713.89 m 561.28 713.89 l S Q
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 702.89 Td (Yapay izgara \(grid\) harita yerine, akademik literat\374rde standart benchmark kabul edilen NeurIPS 2021) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 691.39 Td (RESCO veri setindeki ger\347ek Almanya / K\366ln \(Cologne\) haritasi ve ger\347ek sabah zirve saati \(07:00-08:00,) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 679.89 Td (25200-28800 sn\) ara\347 rotalari kullanilmistir:) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 668.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 668.39 Td (Ger\347ek Konum:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( K\366ln-Lindenthal \(50931, K\366ln \334niversitesi ve \334niversite Hastanesi b\366lgesi\),) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 656.59 Td (D\374rener Strasse ana bulvari.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 644.79 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 644.79 Td (1. Bati Kavsagi \(Node 359566\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( D\374rener Strasse & Lindenthalg\374rtel / Stadtwaldg\374rtel \(50.927831,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 632.99 Td (6.908958\) - Bulvar & tramvay kesisimi.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 621.19 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 621.19 Td (2. Orta Kavsak \(Node 360086\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( D\374rener Strasse & Theresienstrasse / Klosterstrasse \(50.929489,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 609.39 Td (6.913100\) - Ara toplayici cadde.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 597.59 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 597.59 Td (3. Dogu Kavsagi \(Node 360082\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( D\374rener Strasse & Geibelstrasse / Herbert-Lewin-Strasse) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 585.79 Td (\(50.930924, 6.916756\) - Hastane girisi.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 573.99 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 573.99 Td (Tekil Kavsak \(nets/cologne1\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( D\374rener Strasse & Universit\344tsstrasse \(Node 357187, 50.930968,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 562.19 Td (6.926376\).) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 546.39 Td (2. SISTEM MIMARISI VE ALGORITMIK TASARIM \(NELER YAPILDI?\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 542.39 m 561.28 542.39 l S Q
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 531.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 531.39 Td (A. Dinamik Topoloji Kesfi & G\374venlik Kisitlari \(src/corridor3_runner.py\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( RealNetworkSimulation) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 519.59 Td (sinifi haritadaki kavsaklari, gelen seritleri ve yesil fazlari XML'den otomatik kesfeder. Trafik) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 507.79 Td (g\374venligi geregi faz degisimlerinde 3 sn sari isik \(yellow_time=3s\) zorunludur. Ana fazlar \(Faz) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 495.99 Td (0, 4\) i\347in min_green=10s, max_green=45s; sola d\366n\374s fazlari \(Faz 2, 6\) i\347in min_green=4s,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 484.19 Td (max_green=12s uygulanir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 472.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 472.39 Td (B. 4 Fazli Akilli Faz Atlama \(Acyclic 4-Phase Smart Phase Skipping\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Klasik Sabit S\374reli) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 460.59 Td (\(Fixed-Time\) ve Klasik Sens\366rl\374 \(Actuated\) sistemler fazlari sabit sirayla \(0 -> 2 -> 4 -> 6\)) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 448.79 Td (d\366ner; sola d\366necek ara\347 olmasa bile Faz 2 ve Faz 6 i\347in d\366ng\374 basina 14 sn bosa harcanir. Bizim) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 436.99 Td (DQN ajanimiz ise 4 fazin tamamini degerlendirir; sola d\366n\374s seritlerinde bekleyen ara\347 sayisi <) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 425.19 Td (2 ise valid_mask ile o fazlari atlar ve dogrudan yogun Faz 0 <-> Faz 4 arasinda ge\347is yapar.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 413.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 413.39 Td (C. Faz-Rekabetli Derin Q-Agi \(DeepPhaseMLP & DQNAgent - src/rl_agent.py\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Her aday yesil faz p) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 401.59 Td (in {0,2,4,6} i\347in 6 normalize \366znitelik \347ikarilir: [norm_halted, norm_max_wait, norm_veh,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 389.79 Td (is_current_phase, norm_green_elapsed, other_halted_pressure]. Sinir agi 6 -> 64 \(ReLU\) -> 64) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 377.99 Td (\(ReLU\) -> 1 \(Linear Q-Value\) mimarisinde 961 parametreli \347ok katmanli algilayicidir \(%100) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 366.19 Td (rastgele He Normal ilklendirme ile sifirdan egitildi\).) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 354.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 354.39 Td (D. \326d\374l Fonksiyonu & Egitim Hiperparametreleri:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( R_t = -\(0.50*\(total_halted/40\) +) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 342.59 Td (0.35*\(max_wait/120\) + 0.15*is_switched\). Replay Buffer N=20,000, batch_size=64, gamma=0.95,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 330.79 Td (lr=0.0015, Target Network senkronizasyonu=250 adim, epsilon=1.00 -> 0.03.) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 314.99 Td (3. 50 EPIZOT EGITIM YAKINSAMASI VE 3 MODLU BENCHMARK SONU\307LARI) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 310.99 m 561.28 310.99 l S Q
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 299.99 Td (Model, ger\347ek K\366ln 3'l\374 koridorunda \(cologne3\) 50 tam epizot \(50 x 3600 sn = 50 saatlik trafik akisi\)) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 288.49 Td (boyunca egitilmistir \(results/training_log.csv\):) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 276.99 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 276.99 Td (Epizot 2 \(Baslangi\347\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Ortalama Bekleme = 23.37 sn  |  Ortalama Kuyruk = 12.63 ara\347  |  TD Loss =) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 265.19 Td (0.9571) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 253.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 253.39 Td (Epizot 44 \(En Iyi Rekor\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Ortalama Bekleme = 8.67 sn   |  Ortalama Kuyruk = 6.20 ara\347   | ) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 241.59 Td (\(models/dqn_resco_cologne.json olarak kaydedildi\)) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 229.79 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 229.79 Td (Epizot 50 \(Final\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Ortalama Bekleme = 11.61 sn  |  Ortalama Kuyruk = 7.07 ara\347   |  TD Loss =) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 217.99 Td (0.0665 \(Epsilon = 0.03\)) Tj ET
+q 0.120 0.160 0.250 rg 34.00 185.19 527.28 18.00 re f Q
+BT /F2 8.20 Tf 1.000 1.000 1.000 rg 40.00 190.69 Td (Kontrol Modu \(Cologne-3, 1800s Test, seed=42\)) Tj ET
+BT /F2 8.20 Tf 1.000 1.000 1.000 rg 240.00 190.69 Td (Ort. Bekleme) Tj ET
+BT /F2 8.20 Tf 1.000 1.000 1.000 rg 325.00 190.69 Td (Ort. Kuyruk) Tj ET
+BT /F2 8.20 Tf 1.000 1.000 1.000 rg 405.00 190.69 Td (Seyahat S\374resi) Tj ET
+BT /F2 8.20 Tf 1.000 1.000 1.000 rg 485.00 190.69 Td (CO2 Salinimi) Tj ET
+q 0.970 0.980 1.000 rg 0.750 0.810 0.880 RG 0.8 w 34.00 167.19 527.28 18.00 re B Q
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 40.00 172.69 Td (1. Fixed-Time \(Sabit S\374reli Klasik\)) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 240.00 172.69 Td (33.09 sn) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 325.00 172.69 Td (18.34 ara\347) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 405.00 172.69 Td (82.88 sn) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 485.00 172.69 Td (91.86 kg) Tj ET
+q 1.000 1.000 1.000 rg 0.750 0.810 0.880 RG 0.8 w 34.00 149.19 527.28 18.00 re B Q
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 40.00 154.69 Td (2. Actuated \(Klasik Sirali Sens\366rl\374\)) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 240.00 154.69 Td (31.00 sn \(-%6.3\)) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 325.00 154.69 Td (14.02 ara\347) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 405.00 154.69 Td (83.17 sn) Tj ET
+BT /F1 8.20 Tf 0.120 0.160 0.230 rg 485.00 154.69 Td (82.80 kg) Tj ET
+q 0.880 0.980 0.930 rg 0.750 0.810 0.880 RG 0.8 w 34.00 131.19 527.28 18.00 re B Q
+BT /F2 8.20 Tf 0.020 0.350 0.250 rg 40.00 136.69 Td (3. DQN RL \(4 Fazli Akilli Faz Atlama\)) Tj ET
+BT /F2 8.20 Tf 0.020 0.350 0.250 rg 240.00 136.69 Td (14.40 sn \(-%56.5\)) Tj ET
+BT /F2 8.20 Tf 0.020 0.350 0.250 rg 325.00 136.69 Td (7.30 ara\347 \(-%60.2\)) Tj ET
+BT /F2 8.20 Tf 0.020 0.350 0.250 rg 405.00 136.69 Td (62.77 sn \(-%24.3\)) Tj ET
+BT /F2 8.20 Tf 0.020 0.350 0.250 rg 485.00 136.69 Td (54.80 kg \(-%40.3\)) Tj ET
+q 0.880 0.980 0.930 rg 0.060 0.650 0.450 RG 0.8 w 34.00 97.19 527.28 26.00 re B Q
+BT /F2 7.85 Tf 0.020 0.350 0.250 rg 42.00 107.19 Td (TEMEL BULGU: Egitilmis DQN modeli, Sabit S\374reli sisteme g\366re bekleme s\374resini %56.5, Klasik Sens\366rl\374 sisteme g\366re %53.5 azaltmistir!) Tj ET
+BT /F1 7.80 Tf 0.450 0.500 0.580 rg 34.00 18.00 Td (Sayfa 1 / 2  -  MCB\334 Bilgisayar M\374hendisligi Bitirme Projesi Teknik \326zeti) Tj ET
+endstream
+endobj
+6 0 obj
+<< /Length 8566 >>
+stream
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 803.89 Td (4. DEPO \(REPOSITORY\) DOSYA YAPISI VE \326NEMLI MOD\334LLER) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 799.89 m 561.28 799.89 l S Q
+q 0.080 0.110 0.180 rg 0.250 0.320 0.450 RG 0.8 w 34.00 633.39 527.28 161.50 re B Q
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 781.89 Td (adaptive-traffic-signal-rl/) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 770.39 Td (  +-- src/rl_agent.py                  # DeepPhaseMLP \(6->64->64->1\), DQNAgent, ReplayBuffer, save/load & checkpoint) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 758.89 Td (  +-- src/corridor3_runner.py          # RealNetworkSimulation, 4 fazli akilli faz atlama, 3 modlu benchmark & egitim) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 747.39 Td (  +-- src/baseline_runner.py           # Tekil kavsak \(cologne1\) test ve karsilastirma kosucusu) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 735.89 Td (  +-- src/update_charts_and_report.py  # Egitim loglarindan SVG grafiklerini \(learning_curve, comparison\) ureten betik) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 724.39 Td (  +-- models/dqn_resco_cologne.json    # 50 epizot egitilmis en iyi \(best\) sinir agi agirliklari \(production model\)) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 712.89 Td (  +-- models/training_checkpoint.json  # Yarida birakip devam etme \(resume\) icin tam egitim checkpoint dosyasi) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 701.39 Td (  +-- nets/cologne3/ & nets/cologne1/  # Gercek Koln haritalari \(.net.xml, .rou.xml, .sumocfg, gui-settings.xml\)) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 689.89 Td (  +-- results/training_log.csv         # 50 epizotluk egitim gecmisi \(episode, avg_wait_s, avg_queue, loss, epsilon\)) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 678.39 Td (  +-- results/cologne3_corridor_summary.csv # 3 modun resmi karsilastirma metrikleri tablosu) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 666.89 Td (  +-- results/learning_curve.svg & cologne3_comparison.svg # Vize raporunda kullanilan egitim ve kiyaslama grafikleri) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 655.39 Td (  +-- docs/MCBU_Midterm_Report.docx    # MCBU resmi vize raporu formatinda doldurulmus Ingilizce rapor) Tj ET
+BT /F3 7.10 Tf 0.900 0.940 1.000 rg 42.00 643.89 Td (  +-- 1_Mod_... .bat - 6_Egitimi_... .bat # Tek tikla SUMO-GUI izleme, tablo alma ve egitim baslatma kisayollari) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 620.39 Td (5. HIZLI \307ALISTIRMA KOMUTLARI \(WINDOWS .BAT VE CLI\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 616.39 m 561.28 616.39 l S Q
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 605.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 605.39 Td (3 Modu Hizlica Test Edip Tablo Almak \(Headless - 20 sn\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg () Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 593.59 Td (4_Tum_Modlari_Hizli_Karsilastir_Tablo.bat  veya  python src/corridor3_runner.py --mode compare) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 581.79 Td (--steps 1800) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 569.99 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 569.99 Td (SUMO-GUI'de 3 Modu G\366rsel Olarak Izlemek:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( 1_Mod_Sabit_Sureli_3Kavsak_Izle.bat  | ) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 558.19 Td (2_Mod_Sensorlu_Actuated_3Kavsak_Izle.bat  |  3_Mod_Akilli_RL_DQN_3Kavsak_Izle.bat) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 546.39 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 546.39 Td (Egitime Devam Etmek veya Sifirdan Baslatmak:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( 5_Egitimi_Baslat_veya_Devam_Et.bat \(Checkpoint'ten) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 534.59 Td (devam eder\)  |  6_Egitimi_Sifirla_Bastan_Baslat.bat) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 518.79 Td (6. ARKADASIN YAPAY ZEKA ARACI I\307IN BAGLAM VE FINAL G\326REVLERI \(AI PROMPT REHBERI\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 514.79 m 561.28 514.79 l S Q
+q 0.920 0.950 1.000 rg 0.150 0.390 0.920 RG 0.8 w 34.00 475.79 527.28 34.00 re B Q
+BT /F2 8.40 Tf 0.100 0.240 0.650 rg 42.00 496.79 Td (BU DOK\334MANI OKUYAN YAPAY ZEKA ASISTANINA NOT \(INSTRUCTIONS FOR COLLABORATING AI\):) Tj ET
+BT /F1 8.30 Tf 0.120 0.160 0.230 rg 42.00 484.79 Td (Bu proje MCB\334 Bilgisayar M\374h. Bitirme Projesidir. Vize \(Midterm\) asamasi %100 tamamlanmis ve GitHub'a pushlanmistir.) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 463.79 Td (Mevcut \347alisan \347ekirdek dosyalari \(src/rl_agent.py, src/corridor3_runner.py ve) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 452.29 Td (models/dqn_resco_cologne.json\) bozmadan, Final \(Haziran\) asamasi i\347in asagidaki 3 mod\374l \374zerinde) Tj ET
+BT /F1 8.80 Tf 0.120 0.160 0.230 rg 34.00 440.79 Td (ekip\347e gelistirme yapilabilir:) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 429.29 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 429.29 Td (Mod\374l 1 - Multi-Agent Komsu Kavsak Haberlesmesi \(Yesil Dalga / Green Wave\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Su an cologne3) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 417.49 Td (i\347indeki 3 kavsak \(359566, 360086, 360082\) ayni egitilmis DeepPhaseMLP agirliklarini paylasmakta) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 405.69 Td (\(Parameter Sharing\) ancak birbirlerinin anlik kuyruk ve aktif faz bilgisini girdi olarak) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 393.89 Td (almamaktadir. Final asamasinda komsu kavsaktan gelen ara\347 baskisi \(upstream/downstream platoon) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 382.09 Td (pressure\) extract_phase_features fonksiyonuna eklenerek yesil dalga koordinasyonu saglanacaktir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 370.29 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 370.29 Td (Mod\374l 2 - Acil Durum Araci \326nceligi \(Emergency Vehicle Preemption - EVP\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( Trafige) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 358.49 Td (ambulans/itfaiye \(vType='emergency'\) eklendiginde, TraCI ile gelen seritte acil durum araci) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 346.69 Td (algilanirsa g\374venlik kisitlarini \(min_green ve 3 sn sari isik\) ihlal etmeden ilgili fazin) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 334.89 Td (\366ncelikli olarak yesile a\347ilmasi \(preemption override\) saglanacaktir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 323.09 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 323.09 Td (Mod\374l 3 - Canli Performans ve Karsilastirma Dashboard'u:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( results/training_log.csv ve) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 311.29 Td (results/cologne3_corridor_summary.csv \347iktilari ile canli TraCI telemetri verilerini) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 299.49 Td (g\366rsellestiren interaktif bir aray\374z \(Streamlit veya Web Dashboard\) eklenecektir.) Tj ET
+BT /F2 10.20 Tf 0.060 0.090 0.160 rg 34.00 283.69 Td (7. TEKNIK DOGRULAMA \326ZETI \(NEDEN SISTEM GER\307EK\307I VE AKADEMIK OLARAK SAGLAM?\)) Tj ET
+q 0.150 0.390 0.920 RG 1.40 w 34.00 279.69 m 561.28 279.69 l S Q
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 268.69 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 268.69 Td (Adil ve Birebir Ayni Test Ortami \(Zero Cheat\):) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( \334\347 kontrol modu da \(Fixed-Time, Actuated, DQN RL\)) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 256.89 Td (birebir ayni cologne3.rou.xml ara\347 rotalari ve ayni seed=42 ile kosulmaktadir. Kuyruk, bekleme) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 245.09 Td (s\374resi ve CO2 verileri dogrudan SUMO TraCI API'sinden \(getLastStepHaltingNumber, getWaitingTime,) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 233.29 Td (getCO2Emission\) saniye saniye \366l\347\374lmektedir.) Tj ET
+BT /F2 9.20 Tf 0.150 0.390 0.920 rg 40.00 221.49 Td (\225) Tj ET
+BT /F2 8.65 Tf 0.060 0.090 0.160 rg 50.00 221.49 Td (Ger\347ek Sinir Agi Egitimi:) Tj /F1 8.65 Tf 0.120 0.160 0.230 rg ( models/dqn_resco_cologne.json i\347indeki agirliklar %100 rastgele) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 209.69 Td (baslatilip 50 saatlik sim\374lasyon verisi \374zerinde Bellman hata geri yayilimi \(backpropagation\)) Tj ET
+BT /F1 8.65 Tf 0.120 0.160 0.230 rg 50.00 197.89 Td (ile egitilmistir.) Tj ET
+BT /F1 7.80 Tf 0.450 0.500 0.580 rg 34.00 18.00 Td (Sayfa 2 / 2  -  GitHub: https://github.com/Apexq/adaptive-traffic-signal-rl.git) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000279 00000 n 
+0000000431 00000 n 
+0000010955 00000 n 
+0000019572 00000 n 
+0000019669 00000 n 
+0000019771 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+19866
+%%EOF
