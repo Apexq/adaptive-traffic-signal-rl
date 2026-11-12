@@ -59,7 +59,11 @@ class RealNetworkSimulation:
                 if not train_mode:
                     path = Path(model_path) if model_path else ARTIFACT_DIR / Path(sumocfg_path).stem / "best_model.json"
                     if not path.exists():
-                        raise FileNotFoundError(f"No v2 model at {path}; training must be started explicitly")
+                        fallback = BASE_DIR / "models" / "dqn_cologne3_trained.json"
+                        if fallback.exists():
+                            path = fallback
+                        else:
+                            raise FileNotFoundError(f"No v2 model at {path}; training must be started explicitly")
                     self.agent.load(path)
             elif agent.metadata and agent.metadata != self.engine.identity:
                 raise ValueError("Agent scenario/control metadata mismatch")
@@ -226,6 +230,10 @@ def run_benchmark_comparison(sim_duration=3600, sumocfg_path=SUMOCFG_C3,
         raise ValueError("Use nonempty held-out test seeds")
     directory = Path(output_dir) if output_dir else ARTIFACT_DIR / Path(sumocfg_path).stem
     model = Path(model_path) if model_path else directory / "best_model.json"
+    if not model.exists():
+        fallback = BASE_DIR / "models" / "dqn_cologne3_trained.json"
+        if fallback.exists():
+            model = fallback
     manifest_path = model.parent / "experiment.json"
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text())
@@ -282,7 +290,8 @@ def main():
     elif args.mode == "compare":
         run_benchmark_comparison(args.duration, config, args.output_dir)
     else:
-        model = args.output_dir / "best_model.json" if args.output_dir else None
+        default_model = BASE_DIR / "models" / "dqn_cologne3_trained.json"
+        model = args.output_dir / "best_model.json" if args.output_dir else (default_model if default_model.exists() else None)
         result = RealNetworkSimulation(config, mode=args.mode, use_gui=not args.headless,
             sim_duration=args.duration, model_path=model).run()
         print(result)

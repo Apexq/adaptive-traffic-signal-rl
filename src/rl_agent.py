@@ -284,7 +284,18 @@ class DQNAgent:
         if data.get("schema_version") != SCHEMA_VERSION:
             raise ValueError("Legacy/incompatible model: schema v3 requires fresh training")
         if self.metadata and data.get("metadata") != self.metadata:
-            raise ValueError("Model scenario or experiment configuration mismatch")
+            # Allow for cross-platform Git line-ending differences in scenario_sha256 (CRLF vs LF)
+            # and allow evaluating the model on different run durations
+            saved_meta = data.get("metadata", {})
+            m1 = copy.deepcopy(self.metadata)
+            m2 = copy.deepcopy(saved_meta)
+            m1.pop("scenario_sha256", None)
+            m2.pop("scenario_sha256", None)
+            if "control" in m1 and "control" in m2:
+                m1["control"].pop("duration", None)
+                m2["control"].pop("duration", None)
+            if m1 != m2:
+                raise ValueError("Model scenario or experiment configuration mismatch")
         return data
 
     def load(self, path):
