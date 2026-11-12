@@ -1,4 +1,5 @@
-mode,completed_trips,avg_waiting_time_s,avg_time_loss_s,avg_travel_time_s,avg_corridor_queue_veh,total_co2_kg,ep_reward,avg_loss,label
-fixed,1619,33.09,46.31,82.88,18.34,91.86,0.0,0.0,1. Fixed-Time (Sabit Sureli Klasik)
-actuated,1602,31.0,46.54,83.17,14.02,82.8,0.0,0.0,2. Actuated (Klasik Sirali Sensorlu)
-dqn,1623,13.0,24.5,61.12,5.79,50.16,0.0,0.0,3. DQN RL (4 Fazli Akilli Faz Atlama)
+mode,seed_count,selection_cost_mean,selection_cost_std,observed_avg_waiting_time_s_mean,observed_avg_waiting_time_s_std,completed_avg_travel_time_s_mean,completed_avg_travel_time_s_std,avg_corridor_queue_veh_mean,avg_corridor_queue_veh_std,total_co2_kg_mean,total_co2_kg_std,completed_trips_mean,completed_trips_std,remaining_vehicles_mean,remaining_vehicles_std,pending_vehicles_mean,pending_vehicles_std,teleports_mean,teleports_std,collisions_mean,collisions_std
+fixed,1,25.0,0.0,0.92,0.0,,,0.8,0.0,0.7788568293417616,0.0,0,0.0,25,0.0,1,0.0,0,0.0,0,0.0
+actuated,1,21.0,0.0,1.08,0.0,,,0.6666666666666666,0.0,0.7578855336552519,0.0,0,0.0,25,0.0,1,0.0,0,0.0,0,0.0
+maxpressure,1,10.0,0.0,0.36,0.0,,,0.3,0.0,0.7957111419347648,0.0,0,0.0,25,0.0,1,0.0,0,0.0,0,0.0
+dqn,1,10.0,0.0,0.36,0.0,,,0.3,0.0,0.7927229655437282,0.0,0,0.0,25,0.0,1,0.0,0,0.0,0,0.0

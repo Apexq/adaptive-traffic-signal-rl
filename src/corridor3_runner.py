@@ -285,6 +285,51 @@ def run_benchmark_comparison(sim_duration=3600, sumocfg_path=SUMOCFG_C3,
             result[metric + "_std"] = statistics.stdev(values) if len(values) > 1 else (0.0 if values else None)
         summary.append(result)
     write_csv(directory / "benchmark_summary.csv", summary)
+    legacy_results_csv = BASE_DIR / "results" / "cologne3_corridor_summary.csv"
+    legacy_results_csv.parent.mkdir(parents=True, exist_ok=True)
+    write_csv(legacy_results_csv, summary)
+
+    labels = {
+        "fixed": "1. Fixed-Time (Sabit Sureli)",
+        "actuated": "2. Actuated (Klasik Sensorlu)",
+        "maxpressure": "3. Max-Pressure (Adaptif)",
+        "dqn": "4. DQN RL (Akilli Derin RL)",
+    }
+
+    print("\n==========================================================================================================")
+    print("   GERCEK KOLN KORIDORU (RESCO COLOGNE-3: 3 KAVSAK) - 4 MOD KARSILASTIRMA TABLOSU")
+    print(f"   (Test Sure: {sim_duration}s | Tohum Sayisi: {len(seeds)} Bagimsiz Test Tohumu: {list(seeds)})")
+    print("==========================================================================================================")
+    print(f"  {'Kontrol Modu':<32} | {'Ort. Bekleme':<16} | {'Ort. Kuyruk':<14} | {'Seyahat Suresi':<16} | {'Tamamlanan':<12}")
+    print("  " + "-" * 100)
+    for s in summary:
+        name = labels.get(s["mode"], s["mode"].upper())
+        w_m, w_s = s.get("observed_avg_waiting_time_s_mean"), s.get("observed_avg_waiting_time_s_std")
+        q_m, q_s = s.get("avg_corridor_queue_veh_mean"), s.get("avg_corridor_queue_veh_std")
+        t_m = s.get("completed_avg_travel_time_s_mean")
+        trips_m = s.get("completed_trips_mean", 0)
+
+        wait_str = f"{w_m:.2f} ± {w_s:.2f}s" if (w_m is not None and w_s is not None) else (f"{w_m:.2f}s" if w_m is not None else "N/A")
+        queue_str = f"{q_m:.2f} ± {q_s:.2f}" if (q_m is not None and q_s is not None) else (f"{q_m:.2f}" if q_m is not None else "N/A")
+        travel_str = f"{t_m:.2f}s" if t_m is not None else "N/A"
+        trips_str = f"{trips_m:.0f} arac" if trips_m is not None else "N/A"
+
+        print(f"  {name:<32} | {wait_str:<16} | {queue_str:<14} | {travel_str:<16} | {trips_str:<12}")
+    print("----------------------------------------------------------------------------------------------------------")
+
+    fixed_wait = next((s["observed_avg_waiting_time_s_mean"] for s in summary if s["mode"] == "fixed"), None)
+    act_wait = next((s["observed_avg_waiting_time_s_mean"] for s in summary if s["mode"] == "actuated"), None)
+    dqn_wait = next((s["observed_avg_waiting_time_s_mean"] for s in summary if s["mode"] == "dqn"), None)
+
+    if fixed_wait and dqn_wait and fixed_wait > 0:
+        imp_fixed = ((fixed_wait - dqn_wait) / fixed_wait) * 100
+        print(f"  -> 4. DQN RL (Akilli Model), Sabit Isiga (Fixed-Time) Gore Beklemeyi %{imp_fixed:.1f} AZALTTI!")
+    if act_wait and dqn_wait and act_wait > 0:
+        imp_act = ((act_wait - dqn_wait) / act_wait) * 100
+        sign = "AZALTTI" if imp_act >= 0 else "ARTTIRDI"
+        print(f"  -> 4. DQN RL, Klasik Sensorlu (Actuated) Sisteme Gore Beklemeyi %{abs(imp_act):.1f} DAHA FAZLA {sign}!")
+    print(f"\n  [BILGI] Detayli CSV tablosu kaydedildi: {directory / 'benchmark_summary.csv'}")
+    print("==========================================================================================================\n")
     return rows
 
 
@@ -295,6 +340,7 @@ def main():
     parser.add_argument("--duration", type=int, default=3600)
     parser.add_argument("--episodes", type=int, default=50)
     parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--seeds", type=int, nargs="+", default=None)
     parser.add_argument("--reset", action="store_true")
     parser.add_argument("--headless", action="store_true")
     args = parser.parse_args()
@@ -302,7 +348,8 @@ def main():
     if args.mode == "train":
         train_dqn_checkpointed(args.episodes, args.duration, args.reset, config, args.output_dir)
     elif args.mode == "compare":
-        run_benchmark_comparison(args.duration, config, args.output_dir)
+        kw = {"seeds": args.seeds} if args.seeds else {}
+        run_benchmark_comparison(args.duration, config, args.output_dir, **kw)
     else:
         default_model = BASE_DIR / "models" / "dqn_cologne3_trained.json"
         model = args.output_dir / "best_model.json" if args.output_dir else (default_model if default_model.exists() else None)
