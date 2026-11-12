@@ -5,11 +5,9 @@ The primary experiment is Cologne-3. Both scenarios now share one simulation and
 learning implementation. This branch prepares a fresh training run; **no trained
 v2 policy or improved performance claim is included**.
 
-The original model and result files remain unchanged in `models/` and `results/`.
-They were generated with the old learning/measurement logic and are incompatible
-with v2. The previous README is retained as [historical material](docs/LEGACY_README.md).
-See the [task checklist](docs/IMPLEMENTATION_PLAN.md) and
-[validation record](docs/VALIDATION.md).
+The original model and result files remain safely preserved in `models/` and `results/`.
+They were generated with the baseline 50-episode run and are also tagged in git (`backup-main-v1-50eps` and `v1-50eps-legacy`).
+Executable launch scripts are located in `bat/`.
 
 ## Setup
 
