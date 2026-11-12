@@ -57,13 +57,19 @@ class RealNetworkSimulation:
                 self.agent = DQNAgent(seed=seed)
                 self.agent.metadata = self.engine.identity
                 if not train_mode:
-                    path = Path(model_path) if model_path else ARTIFACT_DIR / Path(sumocfg_path).stem / "best_model.json"
-                    if not path.exists():
+                    if model_path:
+                        path = Path(model_path)
+                        if not path.exists():
+                            raise FileNotFoundError(f"Specified model not found at {path}")
+                    else:
+                        default_v2 = ARTIFACT_DIR / Path(sumocfg_path).stem / "best_model.json"
                         fallback = BASE_DIR / "models" / "dqn_cologne3_trained.json"
-                        if fallback.exists():
+                        if default_v2.exists():
+                            path = default_v2
+                        elif fallback.exists():
                             path = fallback
                         else:
-                            raise FileNotFoundError(f"No v2 model at {path}; training must be started explicitly")
+                            raise FileNotFoundError(f"No v2 model at {default_v2}; training must be started explicitly")
                     self.agent.load(path)
             elif agent.metadata and agent.metadata != self.engine.identity:
                 raise ValueError("Agent scenario/control metadata mismatch")
@@ -229,11 +235,19 @@ def run_benchmark_comparison(sim_duration=3600, sumocfg_path=SUMOCFG_C3,
     if not seeds or set(seeds).intersection(VALIDATION_SEEDS):
         raise ValueError("Use nonempty held-out test seeds")
     directory = Path(output_dir) if output_dir else ARTIFACT_DIR / Path(sumocfg_path).stem
-    model = Path(model_path) if model_path else directory / "best_model.json"
-    if not model.exists():
+    if model_path:
+        model = Path(model_path)
+        if not model.exists():
+            raise FileNotFoundError(f"Missing model at {model}")
+    else:
+        default_v2 = directory / "best_model.json"
         fallback = BASE_DIR / "models" / "dqn_cologne3_trained.json"
-        if fallback.exists():
+        if default_v2.exists():
+            model = default_v2
+        elif fallback.exists():
             model = fallback
+        else:
+            raise FileNotFoundError(f"Missing trained model at {default_v2} or {fallback}")
     manifest_path = model.parent / "experiment.json"
     if manifest_path.exists():
         manifest = json.loads(manifest_path.read_text())
