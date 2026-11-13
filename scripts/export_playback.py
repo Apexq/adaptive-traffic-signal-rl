@@ -204,20 +204,30 @@ def export_benchmark_json():
 
 
 def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Export Cologne-3 SUMO playback JSON")
+    parser.add_argument("--duration", type=int, default=1800, help="Simulation duration in seconds (default: 1800)")
+    parser.add_argument("--seed", type=int, default=20001, help="SUMO seed (default: 20001)")
+    args = parser.parse_args()
+
+    duration = args.duration
+    seed = args.seed
+
     WEB_DATA_DIR.mkdir(parents=True, exist_ok=True)
     export_benchmark_json()
     print("Extracting Cologne-3 road geometry...")
     lanes = extract_road_geometry()
     print(f"Extracted {len(lanes)} road lanes.")
 
-    print("Recording Fixed-Time (180s, seed=20001)...")
-    fixed_rec = record_mode("fixed", duration=180, seed=20001)
+    print(f"Recording Fixed-Time ({duration}s, seed={seed})...")
+    fixed_rec = record_mode("fixed", duration=duration, seed=seed)
 
-    print("Recording DQN RL (180s, seed=20001)...")
-    dqn_rec = record_mode("dqn", duration=180, seed=20001)
+    print(f"Recording DQN RL ({duration}s, seed={seed})...")
+    dqn_rec = record_mode("dqn", duration=duration, seed=seed)
 
     payload = {
-        "meta": {"width": 1000, "height": 700, "duration": 180, "seed": 20001},
+        "meta": {"width": 1000, "height": 700, "duration": duration, "seed": seed},
         "lanes": lanes,
         "stop_points": dqn_rec["stop_points"],
         "fixed": fixed_rec["frames"],

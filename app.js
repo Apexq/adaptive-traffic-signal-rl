@@ -22,7 +22,7 @@
     speed: 1,
     lastTs: 0,
     accumulatorMs: 0,
-    baseFrameIntervalMs: 250, // 1x = 4 simülasyon saniyesi / gerçek saniye
+    baseFrameIntervalMs: 200, // 1x = 5 simülasyon saniyesi / gerçek saniye
   };
 
   // DOM referansları
@@ -33,6 +33,7 @@
     speedBtns: document.querySelectorAll(".speed-btn"),
     scrubber: document.getElementById("timeline-scrubber"),
     simClock: document.getElementById("sim-clock"),
+    simTotal: document.getElementById("sim-total"),
     canvasFixed: document.getElementById("canvas-fixed"),
     canvasDqn: document.getElementById("canvas-dqn"),
     fixedQueue: document.getElementById("fixed-queue"),
@@ -64,6 +65,9 @@
       state.playback = playData;
 
       buildRoadLayer(playData.lanes, playData.meta.width, playData.meta.height);
+      if (el.simTotal && playData.meta && playData.meta.duration) {
+        el.simTotal.textContent = playData.meta.duration + "s";
+      }
       if (el.scrubber && playData.fixed && playData.fixed.length > 0) {
         el.scrubber.max = String(playData.fixed.length - 1);
       }
