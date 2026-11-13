@@ -152,12 +152,13 @@
             <button data-speed="1" class="speed-btn px-2.5 py-1 rounded text-xs font-mono bg-emerald-500/20 text-emerald-300 font-bold cursor-pointer">1x</button>
             <button data-speed="2" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">2x</button>
             <button data-speed="4" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">4x</button>
+            <button data-speed="8" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">8x</button>
           </div>
         </div>
 
         <div class="flex-1 min-w-[220px] flex items-center gap-4">
-          <span class="font-mono text-xs text-slate-400 whitespace-nowrap">Süre: <strong id="sim-clock" class="text-white">001s</strong> / 180s</span>
-          <input type="range" id="timeline-scrubber" min="0" max="179" value="0" class="timeline-slider w-full" />
+          <span class="font-mono text-xs text-slate-400 whitespace-nowrap">Süre: <strong id="sim-clock" class="text-white">001s</strong> / <span id="sim-total">1800s</span></span>
+          <input type="range" id="timeline-scrubber" min="0" max="1799" value="0" class="timeline-slider w-full" />
         </div>
       </div>
 
