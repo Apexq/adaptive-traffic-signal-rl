@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akıllı Trafik Sinyalizasyon Sistemi | Deep RL & SUMO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
+
+  <!-- Sticky Navbar -->
+  <nav class="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3">
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+          <i data-lucide="traffic-cone" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="font-bold tracking-tight text-white">Traffic<span class="text-emerald-400">RL</span></span>
+          <span class="ml-2 hidden rounded-full bg-slate-800 px-2 py-0.5 text-[11px] font-mono text-slate-300 sm:inline-block">RESCO Cologne-3</span>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+        <a href="#simulation" class="hover:text-emerald-400 transition">Canlı Simülasyon</a>
+        <a href="#benchmark" class="hover:text-emerald-400 transition">Performans Testleri</a>
+        <a href="#architecture" class="hover:text-emerald-400 transition">DQN Mimarisi</a>
+        <a href="#safety" class="hover:text-emerald-400 transition">Güvenlik & Doğrulama</a>
+      </div>
+
+      <a href="https://github.com/Apexq/adaptive-traffic-signal-rl" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-2 text-xs font-semibold text-white transition">
+        <i data-lucide="github" class="w-4 h-4"></i>
+        <span>GitHub Repo</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="relative overflow-hidden pt-14 pb-12 sm:pt-20 sm:pb-16">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-medium text-emerald-300 mb-6">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 signal-pulse"></span>
+          <span>Manisa Celal Bayar Üniversitesi · Bilgisayar Mühendisliği Bitirme Projesi</span>
+        </div>
+
+        <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.12]">
+          Derin Pekiştirmeli Öğrenme ile <br class="hidden sm:block" />
+          <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent">
+            Akıllı Trafik Sinyalizasyonu
+          </span>
+        </h1>
+
+        <p class="mt-6 text-lg leading-relaxed text-slate-300 max-w-3xl">
+          NeurIPS 2021 RESCO standartlarındaki gerçek dünya <strong class="text-white">Köln (Cologne-3)</strong> arteriyel koridorunda, 
+          Eclipse SUMO mikroskopik simülatörü üzerinde çalışan <strong class="text-emerald-400">Faz Yarıştırmalı DQN</strong> ajanımız; 
+          sıfır trafik kazası ve sıfır acil frenleme ile bekleme sürelerini <strong class="text-white">%58.9</strong> azaltıyor.
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#simulation" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-6 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-500/25 transition">
+            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            <span>Gerçek Simülasyonu İzle</span>
+          </a>
+          <a href="#benchmark" class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/70 hover:bg-slate-800 px-6 py-3 text-sm font-semibold text-white transition">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            <span>4 Mod Karşılaştırması</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 4 KPI Cards -->
+      <div class="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="glass-card-highlight rounded-2xl p-5">
+          <div class="flex items-center justify-between text-xs font-medium text-emerald-300 uppercase tracking-wider">
+            <span>Sabit Işığa Göre Fark</span>
+            <i data-lucide="trending-down" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-3 text-3xl font-extrabold font-mono text-white">-58.9%</div>
+          <p class="mt-1 text-xs text-slate-400">Ortalama bekleme süresi 32.69s → <span class="text-emerald-400 font-semibold">13.44s</span></p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-xs font-medium text-sky-400 uppercase tracking-wider">
+            <span>Sensörlü Sisteme Göre</span>
+            <i data-lucide="zap" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-3 text-3xl font-extrabold font-mono text-white">-63.7%</div>
+          <p class="mt-1 text-xs text-slate-400">Actuated sistem (37.04s) yerine akıcı döngüsüz geçiş</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-xs font-medium text-emerald-400 uppercase tracking-wider">
+            <span>Trafik Güvenliği</span>
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-3 text-3xl font-extrabold font-mono text-white">0 Kaza</div>
+          <p class="mt-1 text-xs text-slate-400">0 ışınlanma, 0 acil fren (Max-Pressure'da 2 kaza)</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-xs font-medium text-amber-400 uppercase tracking-wider">
+            <span>Araç Tahliye Gücü</span>
+            <i data-lucide="car" class="w-4 h-4"></i>
+          </div>
+          <div class="mt-3 text-3xl font-extrabold font-mono text-white">1,626</div>
+          <p class="mt-1 text-xs text-slate-400">Tüm modeller arasında en yüksek tamamlanan sefer</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Side-by-Side SUMO Simulation Playback -->
+  <section id="simulation" class="py-12 border-t border-slate-800/70 tech-grid">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Gerçek Eclipse SUMO Kaydı (Seed 20001)</span>
+          <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">Yan Yana Canlı Kavşak Simülasyonu</h2>
+          <p class="mt-2 text-sm text-slate-400 max-w-2xl">
+            Aşağıdaki haritalar kurgusal bir animasyon değildir; gerçek Köln-3 ağındaki 76 şerit ve SUMO'dan saniye saniye kaydedilmiş gerçek araç koordinatlarıdır.
+          </p>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-4 text-xs text-slate-300 bg-slate-900/90 border border-slate-800 px-4 py-2.5 rounded-xl">
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-emerald-400"></span> Hareketli Araç</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-rose-500"></span> Bekleyen (Kuyruk)</span>
+          <span class="flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-green-400"></span> Yeşil / Sarı / Kırmızı Faz</span>
+        </div>
+      </div>
+
+      <!-- Playback Controls -->
+      <div class="glass-card rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button id="btn-play-pause" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 px-4 py-2 text-xs font-bold text-slate-950 transition cursor-pointer">
+            <i data-lucide="play" id="icon-play" class="w-4 h-4 fill-current"></i>
+            <span id="txt-play">Başlat</span>
+          </button>
+          <button id="btn-reset" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 px-3 py-2 text-xs font-medium text-slate-200 transition cursor-pointer">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+            <span>Sıfırla</span>
+          </button>
+          <div class="flex items-center gap-1 bg-slate-900 rounded-lg p-1 border border-slate-800">
+            <button data-speed="1" class="speed-btn px-2.5 py-1 rounded text-xs font-mono bg-emerald-500/20 text-emerald-300 font-bold cursor-pointer">1x</button>
+            <button data-speed="2" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">2x</button>
+            <button data-speed="4" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">4x</button>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-[220px] flex items-center gap-4">
+          <span class="font-mono text-xs text-slate-400 whitespace-nowrap">Süre: <strong id="sim-clock" class="text-white">001s</strong> / 180s</span>
+          <input type="range" id="timeline-scrubber" min="0" max="179" value="0" class="timeline-slider w-full" />
+        </div>
+      </div>
+
+      <!-- Dual Canvases -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Fixed-Time Card -->
+        <div class="glass-card rounded-2xl p-4 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-rose-500"></span>
+              <h3 class="font-bold text-white text-sm sm:text-base">1. Sabit Süreli (Fixed-Time)</h3>
+            </div>
+            <span class="rounded-md bg-rose-500/15 border border-rose-500/30 px-2.5 py-0.5 text-xs font-mono text-rose-300">Klasik Kontrol</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Koridor Kuyruğu</div>
+              <div id="fixed-queue" class="font-mono text-lg font-bold text-rose-400">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Geçen Araç</div>
+              <div id="fixed-completed" class="font-mono text-lg font-bold text-slate-200">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">CO₂ Emisyonu</div>
+              <div id="fixed-co2" class="font-mono text-lg font-bold text-slate-300">0.0 kg</div>
+            </div>
+          </div>
+
+          <div class="canvas-wrapper aspect-[10/7]">
+            <canvas id="canvas-fixed" width="1000" height="700" class="w-full h-full block"></canvas>
+            <div class="absolute bottom-2.5 left-3 rounded bg-slate-950/80 px-2 py-1 text-[10px] font-mono text-slate-400">
+              Kavşaklar: 359566 · 360086 · 360082
+            </div>
+          </div>
+        </div>
+
+        <!-- DQN RL Card -->
+        <div class="glass-card-highlight rounded-2xl p-4 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+              <h3 class="font-bold text-white text-sm sm:text-base">4. Akıllı DQN RL (Önerilen Model)</h3>
+            </div>
+            <span class="rounded-md bg-emerald-500/20 border border-emerald-500/40 px-2.5 py-0.5 text-xs font-mono text-emerald-300">Yapay Zeka</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="rounded-lg bg-slate-900/90 border border-emerald-500/20 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Koridor Kuyruğu</div>
+              <div id="dqn-queue" class="font-mono text-lg font-bold text-emerald-400">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-emerald-500/20 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Geçen Araç</div>
+              <div id="dqn-completed" class="font-mono text-lg font-bold text-white">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-emerald-500/20 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">CO₂ Emisyonu</div>
+              <div id="dqn-co2" class="font-mono text-lg font-bold text-emerald-300">0.0 kg</div>
+            </div>
+          </div>
+
+          <div class="canvas-wrapper aspect-[10/7] border-emerald-500/30">
+            <canvas id="canvas-dqn" width="1000" height="700" class="w-full h-full block"></canvas>
+            <div class="absolute bottom-2.5 left-3 rounded bg-slate-950/80 px-2 py-1 text-[10px] font-mono text-emerald-400">
+              Dinamik Faz Seçimi · Boş Faz Atlama Aktif
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benchmark Charts & Official 5-Seed Results -->
+  <section id="benchmark" class="py-16 border-t border-slate-800/70">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-10">
+        <span class="text-xs font-mono uppercase tracking-widest text-sky-400">5 Bağımsız Test Tohumu (Seeds: 20001–20005 · 1800s)</span>
+        <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">Karşılaştırmalı Performans Analizi</h2>
+        <p class="mt-2 text-sm text-slate-400 max-w-3xl">
+          Eğitim ve doğrulama aşamalarında hiç görülmemiş 5 bağımsız test tohumu üzerinde yapılan resmi deney sonuçlarıdır.
+        </p>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-base font-bold text-white mb-1">Ortalama Bekleme Süresi & Kuyruk Uzunluğu</h3>
+          <p class="text-xs text-slate-400 mb-5">Düşük değer daha iyi performansı gösterir.</p>
+          <div class="h-72">
+            <canvas id="chart-benchmark"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-base font-bold text-white mb-1">50 Bölümlük Eğitim Yakınsama Eğrisi (Convergence)</h3>
+          <p class="text-xs text-slate-400 mb-5">Ajanın başlangıçtaki rastgele ağırlıklardan optimal politikaya öğrenme süreci.</p>
+          <div class="h-72">
+            <canvas id="chart-learning"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Metrics Table -->
+      <div class="glass-card rounded-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-white">Resmi Benchmark Karşılaştırma Tablosu (Cologne-3)</h3>
+          <span class="text-xs font-mono text-slate-400">Veri Kaynağı: results/cologne3_corridor_summary.csv</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-900/90 text-xs uppercase font-mono text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="px-6 py-3.5">Kontrol Yöntemi</th>
+                <th class="px-6 py-3.5">Ort. Bekleme (sn)</th>
+                <th class="px-6 py-3.5">Koridor Kuyruğu</th>
+                <th class="px-6 py-3.5">Seyahat Süresi</th>
+                <th class="px-6 py-3.5">CO₂ Emisyonu</th>
+                <th class="px-6 py-3.5">Tamamlanan</th>
+                <th class="px-6 py-3.5">Güvenlik (Kaza / Teleport)</th>
+              </tr>
+            </thead>
+            <tbody id="benchmark-tbody" class="divide-y divide-slate-800/70">
+              <!-- Populated dynamically from benchmark_data.json -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Max-Pressure vs DQN Note -->
+      <div class="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-5 flex items-start gap-4">
+        <div class="rounded-lg bg-amber-500/15 p-2.5 text-amber-400 shrink-0 mt-0.5">
+          <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+        </div>
+        <div class="text-sm text-slate-300 leading-relaxed">
+          <strong class="text-amber-300">Akademik Güvenlik Bulgusu (Max-Pressure vs. DQN):</strong>
+          Kural tabanlı Max-Pressure algoritması her 5 saniyede histerezis eşiği olmaksızın agresif ışık değişimi yaptığı için <code class="text-amber-200 font-mono text-xs">Seed 20003</code> testinde araç çarpışmasına (<code class="text-amber-200 font-mono text-xs">gap = -4.93m</code>), aşırı acil frenlemeye (<code class="text-amber-200 font-mono text-xs">severity = 1.00</code>) ve SUMO'nun aracı haritadan ışınlamasına (teleport) yol açmıştır. Buna karşın <strong class="text-emerald-400">DQN modelimiz 5 test tohumunun tamamında 0 kaza, 0 acil fren ve 1,626 tamamlanan seferle %100 güvenli akış</strong> sağlamıştır.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture & 8D State Matrix -->
+  <section id="architecture" class="py-16 border-t border-slate-800/70 tech-grid">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-10">
+        <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Derin Q-Öğrenme Mimarisi</span>
+        <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">Faz Yarıştırmalı DQN & 8-Boyutlu Gözlem Uzayı</h2>
+        <p class="mt-2 text-sm text-slate-400 max-w-3xl">
+          Sabit çıkışlı klasik ağların aksine, her yeşil fazı kendi 8 boyutlu öznitelik vektörüyle puanlayan (<code class="font-mono text-emerald-300">8 → 64 ReLU → 64 ReLU → 1</code>) topolojiden bağımsız karar motoru.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- 8D Feature Explorer -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+          <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+            <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
+            <span>Her Aday Faz İçin Çıkarılan 8 Boyutlu Vektör (s ∈ ℝ⁸)</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-emerald-400 font-bold">x[0] · q_norm</div>
+              <div class="text-slate-300 mt-1">Şeritlerde duran kuyruk araç sayısının şerit kapasitesine normalize oranı.</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-emerald-400 font-bold">x[1] · v_norm</div>
+              <div class="text-slate-300 mt-1">Yaklaşım şeritlerindeki toplam hareketli araç yoğunluğu.</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-emerald-400 font-bold">x[2] · w_norm</div>
+              <div class="text-slate-300 mt-1">Araçların kırmızı ışıkta birikmiş kümülatif bekleme süresi (clipped).</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-emerald-400 font-bold">x[3] · max_other_q</div>
+              <div class="text-slate-300 mt-1">Rakip fazlardaki en yüksek kuyruk baskısı (kavşak içi rekabet).</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-sky-400 font-bold">x[4] · is_active</div>
+              <div class="text-slate-300 mt-1">Fazın o an aktif yeşil olup olmadığını gösteren ikili bayrak (1.0 / 0.0).</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-sky-400 font-bold">x[5] · is_major</div>
+              <div class="text-slate-300 mt-1">Ana arteriyel faz (1.0) veya korumalı sol dönüş fazı (0.0) ayrımı.</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-amber-400 font-bold">x[6] · phase_clock</div>
+              <div class="text-slate-300 mt-1">Aktif fazda geçen normalize yeşil süre (sarı/kırmızı boşlukta negatif).</div>
+            </div>
+            <div class="rounded-xl bg-slate-900/90 border border-slate-800 p-3.5">
+              <div class="font-mono text-amber-400 font-bold">x[7] · horizon_frac</div>
+              <div class="text-slate-300 mt-1">Sonlu ufuk (finite-horizon) bitişine kalan simülasyon süresi oranı.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Safety Invariants & Verification -->
+        <div id="safety" class="glass-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+              <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+              <span>Trafik Güvenliği & RL Doğruluk Kuralları</span>
+            </h3>
+            <ul class="space-y-3 text-xs text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <span class="text-emerald-400 mt-0.5">✓</span>
+                <span><strong class="text-white">Sarı + Tümü Kırmızı Koruma:</strong> Faz değişiminde doğrudan kırmızıya atlanmaz; 3s sarı + 1s all-red uygulanır.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-emerald-400 mt-0.5">✓</span>
+                <span><strong class="text-white">Min/Max Yeşil Kısıtları:</strong> Ana yol (10s–45s), Sol dönüş (4s–10s) limitleri her simülasyon tikinde zorlanır.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-emerald-400 mt-0.5">✓</span>
+                <span><strong class="text-white">Maskeli Bellman Hedefi:</strong> Replay Buffer'da geçersiz/yasak fazlar <code class="font-mono text-emerald-300">max Q</code> hesabından çıkarılır.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-emerald-400 mt-0.5">✓</span>
+                <span><strong class="text-white">Gerçek MDP Geçişi:</strong> Ödüller sarı/kırmızı geçiş süresi boyunca γ<sup>Δt / 5</sup> ile indirgenip gerçek s<sub>t+1</sub> anında kaydedilir.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="text-emerald-400 mt-0.5">✓</span>
+                <span><strong class="text-white">20/20 Test Paketi:</strong> Tüm birim ve gerçek SUMO regresyon testleri başarıyla doğrulanmıştır.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-6 rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-3.5 text-center">
+            <div class="text-xs font-mono text-emerald-300 font-bold">20 / 20 TESTS PASSED · 0 TELEPORTS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-10 bg-slate-950/60">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-sm text-slate-400">
+        <strong class="text-white">Beşir Seçilmiş</strong> · Manisa Celal Bayar Üniversitesi Bilgisayar Mühendisliği Bitirme Projesi
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-xs font-mono text-slate-400">
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">Python 3.14</span>
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">Eclipse SUMO</span>
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">TraCI</span>
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">DQN (8-64-64-1)</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

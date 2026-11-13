@@ -1,0 +1,354 @@
+{
+  "benchmark": [
+    {
+      "mode": "fixed",
+      "wait_mean": 32.69,
+      "wait_std": 2.07,
+      "queue_mean": 18.05,
+      "queue_std": 0.28,
+      "travel_mean": 83.28,
+      "co2_mean": 279.75,
+      "completed_mean": 1610.0,
+      "collisions_mean": 0.0,
+      "teleports_mean": 0.0
+    },
+    {
+      "mode": "actuated",
+      "wait_mean": 37.04,
+      "wait_std": 2.82,
+      "queue_mean": 15.73,
+      "queue_std": 0.4,
+      "travel_mean": 91.73,
+      "co2_mean": 304.93,
+      "completed_mean": 1600.6,
+      "collisions_mean": 0.0,
+      "teleports_mean": 0.0
+    },
+    {
+      "mode": "maxpressure",
+      "wait_mean": 12.66,
+      "wait_std": 1.04,
+      "queue_mean": 5.67,
+      "queue_std": 0.22,
+      "travel_mean": 62.21,
+      "co2_mean": 225.06,
+      "completed_mean": 1624.6,
+      "collisions_mean": 0.4,
+      "teleports_mean": 0.2
+    },
+    {
+      "mode": "dqn",
+      "wait_mean": 13.44,
+      "wait_std": 0.82,
+      "queue_mean": 6.02,
+      "queue_std": 0.21,
+      "travel_mean": 63.25,
+      "co2_mean": 227.91,
+      "completed_mean": 1626.4,
+      "collisions_mean": 0.0,
+      "teleports_mean": 0.0
+    }
+  ],
+  "learning_curve": [
+    {
+      "ep": 1,
+      "wait": 17.0,
+      "best": 17.0,
+      "queue": 8.24
+    },
+    {
+      "ep": 2,
+      "wait": 23.37,
+      "best": 17.0,
+      "queue": 11.05
+    },
+    {
+      "ep": 3,
+      "wait": 14.89,
+      "best": 14.89,
+      "queue": 6.98
+    },
+    {
+      "ep": 4,
+      "wait": 14.6,
+      "best": 14.6,
+      "queue": 7.2
+    },
+    {
+      "ep": 5,
+      "wait": 15.91,
+      "best": 14.6,
+      "queue": 6.49
+    },
+    {
+      "ep": 6,
+      "wait": 12.58,
+      "best": 12.58,
+      "queue": 6.2
+    },
+    {
+      "ep": 7,
+      "wait": 12.04,
+      "best": 12.04,
+      "queue": 5.19
+    },
+    {
+      "ep": 8,
+      "wait": 11.97,
+      "best": 11.97,
+      "queue": 5.9
+    },
+    {
+      "ep": 9,
+      "wait": 10.71,
+      "best": 10.71,
+      "queue": 4.81
+    },
+    {
+      "ep": 10,
+      "wait": 13.44,
+      "best": 10.71,
+      "queue": 5.92
+    },
+    {
+      "ep": 11,
+      "wait": 11.96,
+      "best": 10.71,
+      "queue": 5.88
+    },
+    {
+      "ep": 12,
+      "wait": 10.77,
+      "best": 10.71,
+      "queue": 5.22
+    },
+    {
+      "ep": 13,
+      "wait": 11.3,
+      "best": 10.71,
+      "queue": 5.17
+    },
+    {
+      "ep": 14,
+      "wait": 11.4,
+      "best": 10.71,
+      "queue": 5.34
+    },
+    {
+      "ep": 15,
+      "wait": 11.23,
+      "best": 10.71,
+      "queue": 4.86
+    },
+    {
+      "ep": 16,
+      "wait": 12.38,
+      "best": 10.71,
+      "queue": 5.02
+    },
+    {
+      "ep": 17,
+      "wait": 12.4,
+      "best": 10.71,
+      "queue": 5.6
+    },
+    {
+      "ep": 18,
+      "wait": 10.44,
+      "best": 10.44,
+      "queue": 4.89
+    },
+    {
+      "ep": 19,
+      "wait": 10.97,
+      "best": 10.44,
+      "queue": 5.16
+    },
+    {
+      "ep": 20,
+      "wait": 9.71,
+      "best": 9.71,
+      "queue": 3.98
+    },
+    {
+      "ep": 21,
+      "wait": 10.98,
+      "best": 9.71,
+      "queue": 5.1
+    },
+    {
+      "ep": 22,
+      "wait": 12.04,
+      "best": 9.71,
+      "queue": 4.84
+    },
+    {
+      "ep": 23,
+      "wait": 10.27,
+      "best": 9.71,
+      "queue": 4.91
+    },
+    {
+      "ep": 24,
+      "wait": 13.37,
+      "best": 9.71,
+      "queue": 4.65
+    },
+    {
+      "ep": 25,
+      "wait": 10.35,
+      "best": 9.71,
+      "queue": 4.58
+    },
+    {
+      "ep": 26,
+      "wait": 9.09,
+      "best": 9.09,
+      "queue": 4.22
+    },
+    {
+      "ep": 27,
+      "wait": 10.25,
+      "best": 9.09,
+      "queue": 4.7
+    },
+    {
+      "ep": 28,
+      "wait": 9.5,
+      "best": 9.09,
+      "queue": 4.54
+    },
+    {
+      "ep": 29,
+      "wait": 10.9,
+      "best": 9.09,
+      "queue": 4.64
+    },
+    {
+      "ep": 30,
+      "wait": 11.74,
+      "best": 9.09,
+      "queue": 4.92
+    },
+    {
+      "ep": 31,
+      "wait": 10.37,
+      "best": 9.09,
+      "queue": 4.72
+    },
+    {
+      "ep": 32,
+      "wait": 8.97,
+      "best": 8.97,
+      "queue": 4.24
+    },
+    {
+      "ep": 33,
+      "wait": 9.69,
+      "best": 8.97,
+      "queue": 4.52
+    },
+    {
+      "ep": 34,
+      "wait": 12.75,
+      "best": 8.97,
+      "queue": 6.71
+    },
+    {
+      "ep": 35,
+      "wait": 9.09,
+      "best": 8.97,
+      "queue": 4.28
+    },
+    {
+      "ep": 36,
+      "wait": 9.64,
+      "best": 8.97,
+      "queue": 4.25
+    },
+    {
+      "ep": 37,
+      "wait": 8.81,
+      "best": 8.81,
+      "queue": 4.09
+    },
+    {
+      "ep": 38,
+      "wait": 9.65,
+      "best": 8.81,
+      "queue": 4.07
+    },
+    {
+      "ep": 39,
+      "wait": 8.87,
+      "best": 8.81,
+      "queue": 3.78
+    },
+    {
+      "ep": 40,
+      "wait": 27.72,
+      "best": 8.81,
+      "queue": 9.87
+    },
+    {
+      "ep": 41,
+      "wait": 26.56,
+      "best": 8.81,
+      "queue": 8.21
+    },
+    {
+      "ep": 42,
+      "wait": 9.66,
+      "best": 8.81,
+      "queue": 4.25
+    },
+    {
+      "ep": 43,
+      "wait": 9.71,
+      "best": 8.81,
+      "queue": 4.09
+    },
+    {
+      "ep": 44,
+      "wait": 8.67,
+      "best": 8.67,
+      "queue": 3.97
+    },
+    {
+      "ep": 45,
+      "wait": 9.72,
+      "best": 8.67,
+      "queue": 4.28
+    },
+    {
+      "ep": 46,
+      "wait": 8.79,
+      "best": 8.67,
+      "queue": 4.03
+    },
+    {
+      "ep": 47,
+      "wait": 9.35,
+      "best": 8.67,
+      "queue": 4.58
+    },
+    {
+      "ep": 48,
+      "wait": 17.42,
+      "best": 8.67,
+      "queue": 8.16
+    },
+    {
+      "ep": 49,
+      "wait": 9.55,
+      "best": 8.67,
+      "queue": 4.26
+    },
+    {
+      "ep": 50,
+      "wait": 10.43,
+      "best": 8.67,
+      "queue": 4.86
+    }
+  ]
+}
