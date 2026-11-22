@@ -27,18 +27,26 @@
         </div>
       </div>
 
-      <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
         <a href="#simulation" class="hover:text-emerald-400 transition">Canlı Simülasyon</a>
         <a href="#benchmark" class="hover:text-emerald-400 transition">Performans Testleri</a>
         <a href="#architecture" class="hover:text-emerald-400 transition">DQN Mimarisi</a>
-        <a href="#safety" class="hover:text-emerald-400 transition">Güvenlik & Doğrulama</a>
+        <a href="#roadmap" class="hover:text-emerald-400 transition">Final Yol Haritası</a>
       </div>
 
-      <a href="https://github.com/Apexq/adaptive-traffic-signal-rl" target="_blank" rel="noopener noreferrer"
-         class="inline-flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-2 text-xs font-semibold text-white transition">
-        <i data-lucide="github" class="w-4 h-4"></i>
-        <span>GitHub Repo</span>
-      </a>
+      <div class="flex items-center gap-2.5">
+        <button id="btn-theme-toggle" type="button" title="Açık / Koyu Tema Değiştir (T)"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition cursor-pointer">
+          <i data-lucide="sun" id="icon-theme" class="w-4 h-4"></i>
+          <span id="txt-theme">Açık Tema</span>
+        </button>
+
+        <a href="https://github.com/Apexq/adaptive-traffic-signal-rl" target="_blank" rel="noopener noreferrer"
+           class="inline-flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3.5 py-2 text-xs font-semibold text-white transition">
+          <i data-lucide="github" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">GitHub Repo</span>
+        </a>
+      </div>
     </div>
   </nav>
 
@@ -48,12 +56,12 @@
       <div class="max-w-4xl">
         <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-medium text-emerald-300 mb-6">
           <span class="h-2 w-2 rounded-full bg-emerald-400 signal-pulse"></span>
-          <span>Manisa Celal Bayar Üniversitesi · Bilgisayar Mühendisliği Bitirme Projesi</span>
+          <span>Manisa Celal Bayar Üniversitesi · Bilgisayar Mühendisliği Bitirme Projesi I (Vize Sunumu)</span>
         </div>
 
         <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.12]">
           Derin Pekiştirmeli Öğrenme ile <br class="hidden sm:block" />
-          <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent">
+          <span class="hero-gradient-text bg-gradient-to-r from-emerald-400 via-teal-300 to-sky-400 bg-clip-text text-transparent">
             Akıllı Trafik Sinyalizasyonu
           </span>
         </h1>
@@ -63,6 +71,17 @@
           Eclipse SUMO mikroskopik simülatörü üzerinde çalışan <strong class="text-emerald-400">Faz Yarıştırmalı DQN</strong> ajanımız; 
           sıfır trafik kazası ve sıfır acil frenleme ile bekleme sürelerini <strong class="text-white">%58.9</strong> azaltıyor.
         </p>
+
+        <div class="mt-5 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+          <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/90 border border-slate-800 px-3 py-1.5">
+            <i data-lucide="users" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span><strong class="text-white">Proje Ekibi:</strong> Umut Şahin · Beşir Seçilmiş</span>
+          </span>
+          <span class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900/90 border border-slate-800 px-3 py-1.5">
+            <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-sky-400"></i>
+            <span><strong class="text-white">Danışman:</strong> Ar. Gör. Dr. Ahmet Cahit Yaşa</span>
+          </span>
+        </div>
 
         <div class="mt-8 flex flex-wrap gap-4">
           <a href="#simulation" class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 px-6 py-3 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-500/25 transition">
@@ -332,8 +351,8 @@
         </div>
 
         <div class="glass-card rounded-2xl p-6">
-          <h3 class="text-base font-bold text-white mb-1">50 Bölümlük Eğitim Yakınsama Eğrisi (Convergence)</h3>
-          <p class="text-xs text-slate-400 mb-5">Ajanın başlangıçtaki rastgele ağırlıklardan optimal politikaya öğrenme süreci.</p>
+          <h3 class="text-base font-bold text-white mb-1">Tarihsel 50 Bölümlük Eğitim Kaydı (v1 Log)</h3>
+          <p class="text-xs text-slate-400 mb-5">Repoda korunan ilk 50 bölümlük öğrenme eğrisi kaydı (güncel 8-özellikli modelin ham arşivi final aşamasında eklenecektir).</p>
           <div class="h-72">
             <canvas id="chart-learning"></canvas>
           </div>
@@ -472,17 +491,62 @@
     </div>
   </section>
 
+  <!-- Midterm -> Final Roadmap & Realistic Constraints -->
+  <section id="roadmap" class="py-16 border-t border-slate-800/70">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="mb-10">
+        <span class="text-xs font-mono uppercase tracking-widest text-sky-400">Vize → Final Çalışma Planı</span>
+        <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">Kısıtlar ve Final Aşaması Hedefleri</h2>
+        <p class="mt-2 text-sm text-slate-400 max-w-3xl">
+          Mevcut prototip simülasyon tabanlı bir araştırma sistemidir; final teslimine kadar deney izlenebilirliği, komşu kavşak koordinasyonu ve adalet/genelleme analizleri derinleştirilecektir.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 mb-4">
+            <i data-lucide="flask-conical" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">1. Ham Arşiv &amp; Eşleştirilmiş Ablasyon</h3>
+          <p class="mt-2 text-xs leading-relaxed text-slate-400">
+            Tek bir deney klasöründe model SHA-256 özeti, seed bazlı ham CSV kayıtları, Max-Pressure kaza izi incelemesi ve aynı aksiyon maskesini kullanan kuyruk-seçici ablasyon testleri tamamlanacak.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 mb-4">
+            <i data-lucide="network" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">2. Komşu Kavşak Koordinasyonu</h3>
+          <p class="mt-2 text-xs leading-relaxed text-slate-400">
+            Şu anki parametre paylaşımlı yerel DQN'e ek olarak komşu şerit doluluğu/geliş bilgisi eklenip, eşit eğitim bütçesinde yerel ve komşu-farkındalı politikalar karşılaştırılacak.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6">
+          <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 mb-4">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">3. Genelleme &amp; Saha Kısıtları</h3>
+          <p class="mt-2 text-xs leading-relaxed text-slate-400">
+            Farklı talep rejimleri, üst yüzdelik (P95) bekleme adaleti ve ikinci bilgisayarda tekrarlanabilirlik doğrulanacak; yerel koridor (ör. Manisa / OSM) uyarlanabilirliği değerlendirilecek.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="border-t border-slate-800/80 py-10 bg-slate-950/60">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="text-sm text-slate-400">
-        <strong class="text-white">Beşir Seçilmiş</strong> · Manisa Celal Bayar Üniversitesi Bilgisayar Mühendisliği Bitirme Projesi
+        <strong class="text-white">Umut Şahin &amp; Beşir Seçilmiş</strong> · Danışman: Ar. Gör. Dr. Ahmet Cahit Yaşa · MCBÜ Bilgisayar Mühendisliği
       </div>
       <div class="flex flex-wrap items-center gap-2 text-xs font-mono text-slate-400">
-        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">Python 3.14</span>
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">Python</span>
         <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">Eclipse SUMO</span>
         <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">TraCI</span>
-        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">DQN (8-64-64-1)</span>
+        <span class="rounded bg-slate-900 border border-slate-800 px-2.5 py-1">DQN (8-64-64-1 · 4,801 param)</span>
       </div>
     </div>
   </footer>

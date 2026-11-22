@@ -19,6 +19,8 @@
     playback: null,
     benchmark: null,
     roadLayer: null,
+    theme: "dark",
+    charts: { benchmark: null, learning: null },
     visibleModes: new Set(MODES),
     frameIndex: 0,
     totalFrames: 0,
@@ -31,6 +33,8 @@
 
   // DOM referansları
   const el = {
+    btnThemeToggle: document.getElementById("btn-theme-toggle"),
+    txtTheme: document.getElementById("txt-theme"),
     btnPlayPause: document.getElementById("btn-play-pause"),
     txtPlay: document.getElementById("txt-play"),
     btnReset: document.getElementById("btn-reset"),
@@ -56,7 +60,50 @@
     chartLearning: document.getElementById("chart-learning"),
   };
 
+  function applyTheme(theme) {
+    state.theme = theme === "light" ? "light" : "dark";
+    const root = document.documentElement;
+    if (state.theme === "light") {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    } else {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    }
+
+    try {
+      localStorage.setItem("trafficrl-theme", state.theme);
+    } catch (_) {
+      // Ignore storage restrictions
+    }
+
+    if (el.txtTheme) {
+      el.txtTheme.textContent = state.theme === "light" ? "Koyu Tema" : "Açık Tema";
+    }
+    const themeIcon = el.btnThemeToggle ? el.btnThemeToggle.querySelector("svg, i") : null;
+    if (themeIcon && window.lucide) {
+      themeIcon.setAttribute("data-lucide", state.theme === "light" ? "moon" : "sun");
+      window.lucide.createIcons();
+    }
+
+    if (state.playback) {
+      buildRoadLayer(state.playback.lanes, state.playback.meta.width, state.playback.meta.height);
+      renderFrame(state.frameIndex);
+    }
+    if (state.benchmark) {
+      renderBenchmarkChart(state.benchmark.benchmark);
+      renderLearningChart(state.benchmark.learning_curve);
+    }
+  }
+
   async function init() {
+    let savedTheme = "dark";
+    try {
+      savedTheme = localStorage.getItem("trafficrl-theme") || "dark";
+    } catch (_) {
+      savedTheme = "dark";
+    }
+    applyTheme(savedTheme);
     bindControls();
 
     try {
@@ -121,13 +168,14 @@
     offscreen.width = width;
     offscreen.height = height;
     const ctx = offscreen.getContext("2d");
+    const isLight = state.theme === "light";
 
-    // Koyu kontrol odası arka planı
-    ctx.fillStyle = "#050912";
+    // Arka plan
+    ctx.fillStyle = isLight ? "#f1f5f9" : "#050912";
     ctx.fillRect(0, 0, width, height);
 
     // İnce arka plan ızgarası
-    ctx.strokeStyle = "rgba(30, 41, 59, 0.28)";
+    ctx.strokeStyle = isLight ? "rgba(148, 163, 184, 0.24)" : "rgba(30, 41, 59, 0.28)";
     ctx.lineWidth = 1;
     for (let x = 0; x <= width; x += 50) {
       ctx.beginPath();
@@ -153,7 +201,7 @@
       for (let i = 1; i < lane.pts.length; i++) {
         ctx.lineTo(lane.pts[i][0], lane.pts[i][1]);
       }
-      ctx.strokeStyle = "#1e293b";
+      ctx.strokeStyle = isLight ? "#94a3b8" : "#1e293b";
       ctx.lineWidth = 10;
       ctx.stroke();
     }
@@ -166,7 +214,7 @@
       for (let i = 1; i < lane.pts.length; i++) {
         ctx.lineTo(lane.pts[i][0], lane.pts[i][1]);
       }
-      ctx.strokeStyle = "#0f172a";
+      ctx.strokeStyle = isLight ? "#e2e8f0" : "#0f172a";
       ctx.lineWidth = 7;
       ctx.stroke();
     }
@@ -180,7 +228,7 @@
       for (let i = 1; i < lane.pts.length; i++) {
         ctx.lineTo(lane.pts[i][0], lane.pts[i][1]);
       }
-      ctx.strokeStyle = "rgba(100, 116, 139, 0.25)";
+      ctx.strokeStyle = isLight ? "rgba(71, 85, 105, 0.35)" : "rgba(100, 116, 139, 0.25)";
       ctx.lineWidth = 1;
       ctx.stroke();
     }
@@ -390,6 +438,23 @@
       });
     });
 
+    if (el.btnThemeToggle) {
+      el.btnThemeToggle.addEventListener("click", () => {
+        applyTheme(state.theme === "dark" ? "light" : "dark");
+      });
+    }
+
+    document.addEventListener("keydown", (e) => {
+      const tag = (e.target && e.target.tagName) || "";
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "t" || e.key === "T") {
+        applyTheme(state.theme === "dark" ? "light" : "dark");
+      } else if (e.code === "Space" && tag !== "BUTTON" && tag !== "A") {
+        e.preventDefault();
+        setPlaying(!state.isPlaying);
+      }
+    });
+
     if (el.scrubber) {
       el.scrubber.addEventListener("input", (e) => {
         setPlaying(false);
@@ -440,12 +505,21 @@
 
   function renderBenchmarkChart(rows) {
     if (!el.chartBenchmark || !rows || typeof Chart === "undefined") return;
+    if (state.charts.benchmark) {
+      state.charts.benchmark.destroy();
+    }
+
+    const isLight = state.theme === "light";
+    const textCol = isLight ? "#334155" : "#cbd5e1";
+    const tickCol = isLight ? "#475569" : "#94a3b8";
+    const gridCol = isLight ? "rgba(148, 163, 184, 0.35)" : "rgba(51, 65, 85, 0.35)";
+    const queueCol = isLight ? "#0284c7" : "#38bdf8";
 
     const labels = ["Fixed-Time", "Actuated", "Max-Pressure", "DQN RL"];
     const waitMeans = rows.map((r) => r.wait_mean);
     const queueMeans = rows.map((r) => r.queue_mean);
 
-    new Chart(el.chartBenchmark, {
+    state.charts.benchmark = new Chart(el.chartBenchmark, {
       type: "bar",
       data: {
         labels,
@@ -454,12 +528,12 @@
             label: "Ort. Bekleme Süresi (sn)",
             data: waitMeans,
             backgroundColor: [
-              "rgba(244, 63, 94, 0.75)",
-              "rgba(251, 146, 60, 0.75)",
-              "rgba(250, 204, 21, 0.75)",
-              "rgba(16, 185, 129, 0.85)",
+              "rgba(244, 63, 94, 0.78)",
+              "rgba(251, 146, 60, 0.78)",
+              "rgba(245, 158, 11, 0.78)",
+              "rgba(16, 185, 129, 0.88)",
             ],
-            borderColor: ["#f43f5e", "#fb923c", "#facc15", "#10b981"],
+            borderColor: ["#e11d48", "#ea580c", "#d97706", "#059669"],
             borderWidth: 1.5,
             borderRadius: 6,
             yAxisID: "y",
@@ -467,8 +541,8 @@
           {
             label: "Ort. Koridor Kuyruğu (araç)",
             data: queueMeans,
-            backgroundColor: "rgba(56, 189, 248, 0.55)",
-            borderColor: "#38bdf8",
+            backgroundColor: isLight ? "rgba(2, 132, 199, 0.45)" : "rgba(56, 189, 248, 0.55)",
+            borderColor: queueCol,
             borderWidth: 1.5,
             borderRadius: 6,
             yAxisID: "y1",
@@ -480,24 +554,24 @@
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            labels: { color: "#cbd5e1", font: { family: "Inter", size: 12 } },
+            labels: { color: textCol, font: { family: "Inter", size: 12 } },
           },
         },
         scales: {
           x: {
-            ticks: { color: "#94a3b8", font: { family: "JetBrains Mono", size: 11 } },
-            grid: { color: "rgba(51, 65, 85, 0.35)" },
+            ticks: { color: tickCol, font: { family: "JetBrains Mono", size: 11 } },
+            grid: { color: gridCol },
           },
           y: {
             position: "left",
-            title: { display: true, text: "Bekleme (sn)", color: "#94a3b8" },
-            ticks: { color: "#94a3b8" },
-            grid: { color: "rgba(51, 65, 85, 0.35)" },
+            title: { display: true, text: "Bekleme (sn)", color: tickCol },
+            ticks: { color: tickCol },
+            grid: { color: gridCol },
           },
           y1: {
             position: "right",
-            title: { display: true, text: "Kuyruk (araç)", color: "#38bdf8" },
-            ticks: { color: "#38bdf8" },
+            title: { display: true, text: "Kuyruk (araç)", color: queueCol },
+            ticks: { color: queueCol },
             grid: { drawOnChartArea: false },
           },
         },
@@ -507,12 +581,20 @@
 
   function renderLearningChart(curve) {
     if (!el.chartLearning || !curve || typeof Chart === "undefined") return;
+    if (state.charts.learning) {
+      state.charts.learning.destroy();
+    }
+
+    const isLight = state.theme === "light";
+    const textCol = isLight ? "#334155" : "#cbd5e1";
+    const tickCol = isLight ? "#475569" : "#94a3b8";
+    const gridCol = isLight ? "rgba(148, 163, 184, 0.35)" : "rgba(51, 65, 85, 0.35)";
 
     const labels = curve.map((c) => "Ep " + c.ep);
     const waitVals = curve.map((c) => c.wait);
     const bestVals = curve.map((c) => c.best);
 
-    new Chart(el.chartLearning, {
+    state.charts.learning = new Chart(el.chartLearning, {
       type: "line",
       data: {
         labels,
@@ -520,8 +602,8 @@
           {
             label: "Bölüm Ort. Bekleme (sn)",
             data: waitVals,
-            borderColor: "#38bdf8",
-            backgroundColor: "rgba(56, 189, 248, 0.12)",
+            borderColor: isLight ? "#0284c7" : "#38bdf8",
+            backgroundColor: isLight ? "rgba(2, 132, 199, 0.12)" : "rgba(56, 189, 248, 0.12)",
             borderWidth: 2,
             pointRadius: 2,
             tension: 0.28,
@@ -530,7 +612,7 @@
           {
             label: "En İyi Skor İlerlemesi (Best)",
             data: bestVals,
-            borderColor: "#10b981",
+            borderColor: isLight ? "#059669" : "#10b981",
             borderDash: [5, 4],
             borderWidth: 2,
             pointRadius: 0,
@@ -543,18 +625,18 @@
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            labels: { color: "#cbd5e1", font: { family: "Inter", size: 12 } },
+            labels: { color: textCol, font: { family: "Inter", size: 12 } },
           },
         },
         scales: {
           x: {
-            ticks: { color: "#94a3b8", maxTicksLimit: 10, font: { family: "JetBrains Mono", size: 11 } },
-            grid: { color: "rgba(51, 65, 85, 0.3)" },
+            ticks: { color: tickCol, maxTicksLimit: 10, font: { family: "JetBrains Mono", size: 11 } },
+            grid: { color: gridCol },
           },
           y: {
-            title: { display: true, text: "Bekleme Süresi (sn)", color: "#94a3b8" },
-            ticks: { color: "#94a3b8" },
-            grid: { color: "rgba(51, 65, 85, 0.35)" },
+            title: { display: true, text: "Bekleme Süresi (sn)", color: tickCol },
+            ticks: { color: tickCol },
+            grid: { color: gridCol },
           },
         },
       },
