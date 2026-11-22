@@ -6,6 +6,8 @@
 (function () {
   "use strict";
 
+  const MODES = ["fixed", "actuated", "maxpressure", "dqn"];
+
   const MODE_LABELS = {
     fixed: { name: "1. Sabit Süreli (Fixed-Time)", badge: "Baz Çizgi", rowClass: "" },
     actuated: { name: "2. Sensörlü (Actuated)", badge: "Klasik", rowClass: "" },
@@ -17,7 +19,9 @@
     playback: null,
     benchmark: null,
     roadLayer: null,
+    visibleModes: new Set(MODES),
     frameIndex: 0,
+    totalFrames: 0,
     isPlaying: false,
     speed: 1,
     lastTs: 0,
@@ -31,17 +35,22 @@
     txtPlay: document.getElementById("txt-play"),
     btnReset: document.getElementById("btn-reset"),
     speedBtns: document.querySelectorAll(".speed-btn"),
+    viewBtns: document.querySelectorAll(".view-btn"),
+    simCards: document.querySelectorAll(".sim-card"),
     scrubber: document.getElementById("timeline-scrubber"),
     simClock: document.getElementById("sim-clock"),
     simTotal: document.getElementById("sim-total"),
-    canvasFixed: document.getElementById("canvas-fixed"),
-    canvasDqn: document.getElementById("canvas-dqn"),
-    fixedQueue: document.getElementById("fixed-queue"),
-    fixedCompleted: document.getElementById("fixed-completed"),
-    fixedCo2: document.getElementById("fixed-co2"),
-    dqnQueue: document.getElementById("dqn-queue"),
-    dqnCompleted: document.getElementById("dqn-completed"),
-    dqnCo2: document.getElementById("dqn-co2"),
+    modes: Object.fromEntries(
+      MODES.map((m) => [
+        m,
+        {
+          canvas: document.getElementById("canvas-" + m),
+          queue: document.getElementById(m + "-queue"),
+          completed: document.getElementById(m + "-completed"),
+          co2: document.getElementById(m + "-co2"),
+        },
+      ])
+    ),
     tbody: document.getElementById("benchmark-tbody"),
     chartBenchmark: document.getElementById("chart-benchmark"),
     chartLearning: document.getElementById("chart-learning"),
@@ -51,25 +60,36 @@
     bindControls();
 
     try {
-      const [benchRes, playRes] = await Promise.all([
+      const responses = await Promise.all([
         fetch("data/benchmark_data.json"),
-        fetch("data/playback_cologne3.json"),
+        fetch("data/cologne3_map.json"),
+        ...MODES.map((m) => fetch("data/playback_" + m + ".json")),
       ]);
 
-      if (!benchRes.ok || !playRes.ok) {
+      if (responses.some((r) => !r.ok)) {
         throw new Error("Veri dosyaları yüklenemedi.");
       }
 
-      const [benchData, playData] = await Promise.all([benchRes.json(), playRes.json()]);
+      const [benchData, mapData, ...modeFrames] = await Promise.all(responses.map((r) => r.json()));
+      const playData = {
+        meta: mapData.meta,
+        lanes: mapData.lanes,
+        stop_points: mapData.stop_points,
+      };
+      MODES.forEach((m, i) => {
+        playData[m] = modeFrames[i];
+      });
+
       state.benchmark = benchData;
       state.playback = playData;
+      state.totalFrames = Math.min(...MODES.map((m) => (playData[m] ? playData[m].length : 0)));
 
       buildRoadLayer(playData.lanes, playData.meta.width, playData.meta.height);
       if (el.simTotal && playData.meta && playData.meta.duration) {
         el.simTotal.textContent = playData.meta.duration + "s";
       }
-      if (el.scrubber && playData.fixed && playData.fixed.length > 0) {
-        el.scrubber.max = String(playData.fixed.length - 1);
+      if (el.scrubber && state.totalFrames > 0) {
+        el.scrubber.max = String(state.totalFrames - 1);
       }
 
       renderBenchmarkTable(benchData.benchmark);
@@ -78,8 +98,7 @@
       renderFrame(0);
     } catch (err) {
       console.error("Veri yükleme hatası:", err);
-      drawFallbackNotice(el.canvasFixed, err.message);
-      drawFallbackNotice(el.canvasDqn, err.message);
+      MODES.forEach((m) => drawFallbackNotice(el.modes[m].canvas, err.message));
     }
   }
 
@@ -234,34 +253,64 @@
   }
 
   function renderFrame(idx) {
-    if (!state.playback) return;
-    const maxIdx = state.playback.fixed.length - 1;
+    if (!state.playback || state.totalFrames <= 0) return;
+    const maxIdx = state.totalFrames - 1;
     const clamped = Math.max(0, Math.min(idx, maxIdx));
     state.frameIndex = clamped;
 
-    const fFixed = state.playback.fixed[clamped];
-    const fDqn = state.playback.dqn[clamped];
+    let clockSec = null;
+    for (const mode of MODES) {
+      const frames = state.playback[mode];
+      const frame = frames ? frames[clamped] : null;
+      const ui = el.modes[mode];
+      if (!frame || !ui) continue;
 
-    drawScene(el.canvasFixed, fFixed);
-    drawScene(el.canvasDqn, fDqn);
+      if (clockSec === null) {
+        clockSec = frame.t;
+      }
 
-    // Telemetri güncellemeleri
-    if (fFixed) {
-      el.fixedQueue.textContent = String(fFixed.qh);
-      el.fixedCompleted.textContent = String(fFixed.arrived);
-      el.fixedCo2.textContent = fFixed.co2.toFixed(1) + " kg";
-      el.simClock.textContent = formatClock(fFixed.t);
+      if (state.visibleModes.has(mode)) {
+        drawScene(ui.canvas, frame);
+      }
+
+      ui.queue.textContent = String(frame.qh);
+      ui.completed.textContent = String(frame.arrived);
+      ui.co2.textContent = frame.co2.toFixed(1) + " kg";
     }
 
-    if (fDqn) {
-      el.dqnQueue.textContent = String(fDqn.qh);
-      el.dqnCompleted.textContent = String(fDqn.arrived);
-      el.dqnCo2.textContent = fDqn.co2.toFixed(1) + " kg";
+    if (clockSec !== null && el.simClock) {
+      el.simClock.textContent = formatClock(clockSec);
     }
 
     if (el.scrubber) {
       el.scrubber.value = String(clamped);
     }
+  }
+
+  function applyViewFilter(viewSpec) {
+    if (viewSpec === "all") {
+      state.visibleModes = new Set(MODES);
+    } else {
+      state.visibleModes = new Set(viewSpec.split(",").filter((m) => MODES.includes(m)));
+    }
+
+    el.simCards.forEach((card) => {
+      const mode = card.dataset.mode;
+      if (state.visibleModes.has(mode)) {
+        card.classList.remove("hidden");
+      } else {
+        card.classList.add("hidden");
+      }
+    });
+
+    el.viewBtns.forEach((btn) => {
+      const active = btn.dataset.view === viewSpec;
+      btn.className = active
+        ? "view-btn px-3 py-1 rounded-lg font-medium bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 cursor-pointer"
+        : "view-btn px-3 py-1 rounded-lg font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-white cursor-pointer";
+    });
+
+    renderFrame(state.frameIndex);
   }
 
   function setPlaying(playing) {
@@ -276,7 +325,7 @@
     }
 
     if (playing) {
-      if (state.playback && state.frameIndex >= state.playback.fixed.length - 1) {
+      if (state.playback && state.frameIndex >= state.totalFrames - 1) {
         state.frameIndex = 0;
       }
       state.lastTs = performance.now();
@@ -297,8 +346,8 @@
       state.accumulatorMs -= steps * stepMs;
       const nextIdx = state.frameIndex + steps;
 
-      if (nextIdx >= state.playback.fixed.length - 1) {
-        renderFrame(state.playback.fixed.length - 1);
+      if (nextIdx >= state.totalFrames - 1) {
+        renderFrame(state.totalFrames - 1);
         setPlaying(false);
         return;
       }
@@ -332,6 +381,12 @@
         });
         btn.className =
           "speed-btn px-2.5 py-1 rounded text-xs font-mono bg-emerald-500/20 text-emerald-300 font-bold cursor-pointer";
+      });
+    });
+
+    el.viewBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        applyViewFilter(btn.dataset.view || "all");
       });
     });
 

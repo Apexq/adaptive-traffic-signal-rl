@@ -220,22 +220,34 @@ def main():
     lanes = extract_road_geometry()
     print(f"Extracted {len(lanes)} road lanes.")
 
-    print(f"Recording Fixed-Time ({duration}s, seed={seed})...")
-    fixed_rec = record_mode("fixed", duration=duration, seed=seed)
+    modes = ("fixed", "actuated", "maxpressure", "dqn")
+    stop_points = None
 
-    print(f"Recording DQN RL ({duration}s, seed={seed})...")
-    dqn_rec = record_mode("dqn", duration=duration, seed=seed)
+    for mode in modes:
+        print(f"Recording {mode} ({duration}s, seed={seed})...")
+        rec = record_mode(mode, duration=duration, seed=seed)
+        if stop_points is None:
+            stop_points = rec["stop_points"]
+        mode_file = WEB_DATA_DIR / f"playback_{mode}.json"
+        mode_file.write_text(json.dumps(rec["frames"], separators=(",", ":")), encoding="utf-8")
+        print(
+            f"Saved {mode_file.name} ({mode_file.stat().st_size / 1024:.1f} KB) "
+            f"- arrived={rec['summary']['completed_trips']}, co2={rec['summary']['total_co2_kg']} kg"
+        )
 
-    payload = {
-        "meta": {"width": 1000, "height": 700, "duration": duration, "seed": seed},
+    map_payload = {
+        "meta": {"width": 1000, "height": 700, "duration": duration, "seed": seed, "modes": list(modes)},
         "lanes": lanes,
-        "stop_points": dqn_rec["stop_points"],
-        "fixed": fixed_rec["frames"],
-        "dqn": dqn_rec["frames"],
+        "stop_points": stop_points or [],
     }
-    out_file = WEB_DATA_DIR / "playback_cologne3.json"
-    out_file.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
-    print(f"Saved playback JSON ({out_file.stat().st_size / 1024:.1f} KB): {out_file}")
+    map_file = WEB_DATA_DIR / "cologne3_map.json"
+    map_file.write_text(json.dumps(map_payload, separators=(",", ":")), encoding="utf-8")
+    print(f"Saved map JSON ({map_file.stat().st_size / 1024:.1f} KB): {map_file}")
+
+    legacy_file = WEB_DATA_DIR / "playback_cologne3.json"
+    if legacy_file.exists():
+        legacy_file.unlink()
+        print(f"Removed superseded 2-mode file: {legacy_file.name}")
 
 
 if __name__ == "__main__":

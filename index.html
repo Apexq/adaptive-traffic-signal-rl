@@ -122,10 +122,10 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
-          <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Gerçek Eclipse SUMO Kaydı (Seed 20001)</span>
-          <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">Yan Yana Canlı Kavşak Simülasyonu</h2>
+          <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Gerçek Eclipse SUMO Kaydı (Seed 20001 · 4 Kontrol Modu)</span>
+          <h2 class="mt-1 text-2xl sm:text-3xl font-bold text-white">4 Mod Eşzamanlı Canlı Kavşak Simülasyonu</h2>
           <p class="mt-2 text-sm text-slate-400 max-w-2xl">
-            Aşağıdaki haritalar kurgusal bir animasyon değildir; gerçek Köln-3 ağındaki 76 şerit ve SUMO'dan saniye saniye kaydedilmiş gerçek araç koordinatlarıdır.
+            Aşağıdaki 4 harita kurgusal bir animasyon değildir; gerçek Köln-3 ağındaki 76 şerit ve SUMO'dan saniye saniye kaydedilmiş gerçek araç koordinatlarıdır.
           </p>
         </div>
 
@@ -138,40 +138,51 @@
       </div>
 
       <!-- Playback Controls -->
-      <div class="glass-card rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <button id="btn-play-pause" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 px-4 py-2 text-xs font-bold text-slate-950 transition cursor-pointer">
-            <i data-lucide="play" id="icon-play" class="w-4 h-4 fill-current"></i>
-            <span id="txt-play">Başlat</span>
-          </button>
-          <button id="btn-reset" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 px-3 py-2 text-xs font-medium text-slate-200 transition cursor-pointer">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-            <span>Sıfırla</span>
-          </button>
-          <div class="flex items-center gap-1 bg-slate-900 rounded-lg p-1 border border-slate-800">
-            <button data-speed="1" class="speed-btn px-2.5 py-1 rounded text-xs font-mono bg-emerald-500/20 text-emerald-300 font-bold cursor-pointer">1x</button>
-            <button data-speed="2" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">2x</button>
-            <button data-speed="4" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">4x</button>
-            <button data-speed="8" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">8x</button>
+      <div class="glass-card rounded-2xl p-4 mb-6 flex flex-col gap-3">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <button id="btn-play-pause" class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 px-4 py-2 text-xs font-bold text-slate-950 transition cursor-pointer">
+              <i data-lucide="play" id="icon-play" class="w-4 h-4 fill-current"></i>
+              <span id="txt-play">Başlat</span>
+            </button>
+            <button id="btn-reset" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 px-3 py-2 text-xs font-medium text-slate-200 transition cursor-pointer">
+              <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+              <span>Sıfırla</span>
+            </button>
+            <div class="flex items-center gap-1 bg-slate-900 rounded-lg p-1 border border-slate-800">
+              <button data-speed="1" class="speed-btn px-2.5 py-1 rounded text-xs font-mono bg-emerald-500/20 text-emerald-300 font-bold cursor-pointer">1x</button>
+              <button data-speed="2" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">2x</button>
+              <button data-speed="4" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">4x</button>
+              <button data-speed="8" class="speed-btn px-2.5 py-1 rounded text-xs font-mono text-slate-400 hover:text-white cursor-pointer">8x</button>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-[220px] flex items-center gap-4">
+            <span class="font-mono text-xs text-slate-400 whitespace-nowrap">Süre: <strong id="sim-clock" class="text-white">001s</strong> / <span id="sim-total">1800s</span></span>
+            <input type="range" id="timeline-scrubber" min="0" max="1799" value="0" class="timeline-slider w-full" />
           </div>
         </div>
 
-        <div class="flex-1 min-w-[220px] flex items-center gap-4">
-          <span class="font-mono text-xs text-slate-400 whitespace-nowrap">Süre: <strong id="sim-clock" class="text-white">001s</strong> / <span id="sim-total">1800s</span></span>
-          <input type="range" id="timeline-scrubber" min="0" max="1799" value="0" class="timeline-slider w-full" />
+        <!-- View Filter Pills -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80 text-xs">
+          <span class="text-slate-400 font-mono mr-1">Görünüm:</span>
+          <button data-view="all" class="view-btn px-3 py-1 rounded-lg font-medium bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 cursor-pointer">4'lü Görünüm (Tümü)</button>
+          <button data-view="fixed,dqn" class="view-btn px-3 py-1 rounded-lg font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-white cursor-pointer">Fixed vs DQN</button>
+          <button data-view="actuated,dqn" class="view-btn px-3 py-1 rounded-lg font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-white cursor-pointer">Actuated vs DQN</button>
+          <button data-view="maxpressure,dqn" class="view-btn px-3 py-1 rounded-lg font-medium bg-slate-900 border border-slate-800 text-slate-400 hover:text-white cursor-pointer">Max-Pressure vs DQN</button>
         </div>
       </div>
 
-      <!-- Dual Canvases -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Fixed-Time Card -->
-        <div class="glass-card rounded-2xl p-4 flex flex-col">
+      <!-- 4-Mode Canvases (2x2 Grid) -->
+      <div id="sim-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 1. Fixed-Time Card -->
+        <div data-mode="fixed" class="sim-card glass-card rounded-2xl p-4 flex flex-col">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <span class="h-3 w-3 rounded-full bg-rose-500"></span>
               <h3 class="font-bold text-white text-sm sm:text-base">1. Sabit Süreli (Fixed-Time)</h3>
             </div>
-            <span class="rounded-md bg-rose-500/15 border border-rose-500/30 px-2.5 py-0.5 text-xs font-mono text-rose-300">Klasik Kontrol</span>
+            <span class="rounded-md bg-rose-500/15 border border-rose-500/30 px-2.5 py-0.5 text-xs font-mono text-rose-300">Sabit Döngü</span>
           </div>
 
           <div class="grid grid-cols-3 gap-2 mb-3">
@@ -192,13 +203,79 @@
           <div class="canvas-wrapper aspect-[10/7]">
             <canvas id="canvas-fixed" width="1000" height="700" class="w-full h-full block"></canvas>
             <div class="absolute bottom-2.5 left-3 rounded bg-slate-950/80 px-2 py-1 text-[10px] font-mono text-slate-400">
-              Kavşaklar: 359566 · 360086 · 360082
+              Sabit Faz Döngüsü · 42s Ana / 8s Dönüş
             </div>
           </div>
         </div>
 
-        <!-- DQN RL Card -->
-        <div class="glass-card-highlight rounded-2xl p-4 flex flex-col">
+        <!-- 2. Actuated Card -->
+        <div data-mode="actuated" class="sim-card glass-card rounded-2xl p-4 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-orange-400"></span>
+              <h3 class="font-bold text-white text-sm sm:text-base">2. Sensörlü (Actuated)</h3>
+            </div>
+            <span class="rounded-md bg-orange-500/15 border border-orange-500/30 px-2.5 py-0.5 text-xs font-mono text-orange-300">Klasik Sensörlü</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Koridor Kuyruğu</div>
+              <div id="actuated-queue" class="font-mono text-lg font-bold text-orange-400">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Geçen Araç</div>
+              <div id="actuated-completed" class="font-mono text-lg font-bold text-slate-200">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">CO₂ Emisyonu</div>
+              <div id="actuated-co2" class="font-mono text-lg font-bold text-slate-300">0.0 kg</div>
+            </div>
+          </div>
+
+          <div class="canvas-wrapper aspect-[10/7]">
+            <canvas id="canvas-actuated" width="1000" height="700" class="w-full h-full block"></canvas>
+            <div class="absolute bottom-2.5 left-3 rounded bg-slate-950/80 px-2 py-1 text-[10px] font-mono text-orange-300">
+              Ardışık Sensörlü Kontrol · ≤2 Duran Araçta Geçiş
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Max-Pressure Card -->
+        <div data-mode="maxpressure" class="sim-card glass-card rounded-2xl p-4 flex flex-col">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+              <h3 class="font-bold text-white text-sm sm:text-base">3. Max-Pressure</h3>
+            </div>
+            <span class="rounded-md bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 text-xs font-mono text-amber-300">Basınç Tabanlı</span>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Koridor Kuyruğu</div>
+              <div id="maxpressure-queue" class="font-mono text-lg font-bold text-amber-400">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">Geçen Araç</div>
+              <div id="maxpressure-completed" class="font-mono text-lg font-bold text-slate-200">0</div>
+            </div>
+            <div class="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-center">
+              <div class="text-[11px] text-slate-400">CO₂ Emisyonu</div>
+              <div id="maxpressure-co2" class="font-mono text-lg font-bold text-slate-300">0.0 kg</div>
+            </div>
+          </div>
+
+          <div class="canvas-wrapper aspect-[10/7]">
+            <canvas id="canvas-maxpressure" width="1000" height="700" class="w-full h-full block"></canvas>
+            <div class="absolute bottom-2.5 left-3 rounded bg-slate-950/80 px-2 py-1 text-[10px] font-mono text-amber-300">
+              Anlık Basınç Heuristiği · Gelen − Giden Kuyruk
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. DQN RL Card -->
+        <div data-mode="dqn" class="sim-card glass-card-highlight rounded-2xl p-4 flex flex-col">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2">
               <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
